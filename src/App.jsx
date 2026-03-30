@@ -52,6 +52,7 @@ const CE_EAST = {
     grossProfit: 113131.76, expenses: 53411.09, netIncome: 59720.67,
   },
   ytdDays: 89,  // Jan 1 – Mar 30, 2026
+};
 
 let MONTHLY_REVENUE = [
   { m:"Jan 25", ce:497382.58,  di:1711.95,   sf:292888.00, total:791982.53,   gp:425681.70  },
