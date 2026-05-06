@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.env*
+.vercel/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# CE East source files contain payroll/contact data — never commit
+incoming/*.xlsx
+incoming/*.xls
+
+# PDFs in incoming/ are work-in-progress; once processed they move to docs/
+incoming/*.pdf
+
+# Archived PDFs in docs/ contain customer/debtor names + dollar amounts.
+# Repo is public — keep these local-only. (loads.csv in public/data/ is what the
+# dashboard reads; password gate protects the deployed URL.)
+docs/*.pdf
+docs/*.xlsx
