@@ -4,7 +4,7 @@ const STORAGE_KEY = "ceeast_auth_v1";
 const VALID_DAYS = 30;
 
 export default function PasswordGate({ children }) {
-  const correctPassword = import.meta.env.VITE_APP_PASSWORD || "ShowFreight2026!";
+  const correctPassword = import.meta.env.VITE_APP_PASSWORD || "East";
   const [unlocked, setUnlocked] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
