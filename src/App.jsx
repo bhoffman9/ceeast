@@ -5,7 +5,7 @@ import OwnerPayback from "./views/OwnerPayback";
 import Reserves from "./views/Reserves";
 
 const TABS = [
-  { id: "owner", label: "Owner Payback", el: OwnerPayback },
+  { id: "owner", label: "Income", el: OwnerPayback },
   { id: "reserves", label: "Reserves", el: Reserves },
 ];
 

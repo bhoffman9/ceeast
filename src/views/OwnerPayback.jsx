@@ -81,8 +81,8 @@ function OwnerPaybackBody({ data, distAmt, setDistAmt }) {
 
   return (
     <div>
-      <div className="ptitle">CE East — Owner Payback</div>
-      <div className="psub">Distributions begin when cumulative gross profit exceeds shareholder loans · live QBO</div>
+      <div className="ptitle">CE East — Income</div>
+      <div className="psub">Live QBO P&L, distribution estimator, and shareholder payback tracker</div>
 
       {/* 2025 + 2026 monthly strip */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 14, marginBottom: 14 }}>
