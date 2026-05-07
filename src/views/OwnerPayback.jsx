@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { fd, fp } from "../lib/format";
 import { fetchOwnerPaybackData } from "../lib/qbo";
 
-// ── Hardcoded policy / cap-table data ──────────────────────────
-// Shareholder loan balances live in QBO equity accounts but the parser doesn't
-// pull them. Update these when contributions/repayments happen.
+// ── Hardcoded contribution amounts ─────────────────────────────
+// Original loan principals stay hardcoded — QBO Shareholder Contributions account
+// shows current balance after distributions, not the original deposit amount.
+// Update if a new contribution is made.
 const SHAREHOLDER = {
   chris:    { name: "Chris",   contributed: 129642.77, repaid: 129642.77, status: "✓ Repaid in full — March 2026 via gross profits" },
-  anthony:  { name: "Anthony", contributed: 13620.48,  repaid: 6810.24,   status: "$6,810 repaid — $6,810 remaining (50%)" },
-  dueFromAnthony: 23000.00,
+  anthony:  { name: "Anthony", contributed: 13620.48,  repaid: 13620.48,  status: "✓ Repaid in full" },
+  // dueFromAnthony comes live from QBO BS (assets["Due from Shareholder - Anthony"])
 };
 
 // Owner distribution split (policy, not data)
@@ -55,6 +56,7 @@ function OwnerPaybackBody({ data, distAmt, setDistAmt }) {
   const totalContrib = SHAREHOLDER.chris.contributed + SHAREHOLDER.anthony.contributed;
   const totalRepaid = SHAREHOLDER.chris.repaid + SHAREHOLDER.anthony.repaid;
   const remainingDue = totalContrib - totalRepaid;
+  const dueFromAnthony = data.bs?.assets?.["Due from Shareholder - Anthony"] || 0;
 
   const monthlyDist = distAmt;
   const annualDist = monthlyDist * 12;
@@ -227,11 +229,11 @@ function OwnerPaybackBody({ data, distAmt, setDistAmt }) {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 11, color: "var(--tx)", fontWeight: 600, marginBottom: 4 }}>{SHAREHOLDER.anthony.name} Contribution</div>
-                  <div className="bar"><div className="bfil" style={{ width: `${(SHAREHOLDER.anthony.repaid / SHAREHOLDER.anthony.contributed) * 100}%`, background: "#f5c542" }} /></div>
-                  <div style={{ fontSize: 10, color: "#f5c542", fontWeight: 600, marginTop: 4 }}>{SHAREHOLDER.anthony.status}</div>
+                  <div className="bar"><div className="bfil" style={{ width: "100%", background: "#3ddc84" }} /></div>
+                  <div style={{ fontSize: 10, color: "#3ddc84", fontWeight: 700, marginTop: 4 }}>{SHAREHOLDER.anthony.status}</div>
                 </div>
                 <div style={{ textAlign: "right", marginLeft: 16 }}>
-                  <div style={{ fontFamily: "var(--f2)", fontSize: 24, fontWeight: 900, color: "#ff8a65" }}>{fd(SHAREHOLDER.anthony.contributed, 0)}</div>
+                  <div style={{ fontFamily: "var(--f2)", fontSize: 24, fontWeight: 900, color: "#3ddc84" }}>{fd(SHAREHOLDER.anthony.contributed, 0)}</div>
                   <div style={{ fontSize: 9, color: "var(--mu)" }}>{fp((SHAREHOLDER.anthony.repaid / SHAREHOLDER.anthony.contributed) * 100)} repaid</div>
                 </div>
               </div>
@@ -251,12 +253,12 @@ function OwnerPaybackBody({ data, distAmt, setDistAmt }) {
                   <div style={{ fontSize: 9, color: "#4fc3f7", letterSpacing: 2, textTransform: "uppercase", marginBottom: 3 }}>Separate — Due FROM Anthony</div>
                   <div style={{ fontSize: 10, color: "var(--mu)" }}>Anthony owes the company · not part of threshold</div>
                 </div>
-                <div style={{ fontFamily: "var(--f2)", fontSize: 22, fontWeight: 900, color: "#4fc3f7", marginLeft: 16 }}>{fd(SHAREHOLDER.dueFromAnthony, 0)}</div>
+                <div style={{ fontFamily: "var(--f2)", fontSize: 22, fontWeight: 900, color: "#4fc3f7", marginLeft: 16 }}>{fd(dueFromAnthony, 0)}</div>
               </div>
             </div>
 
             <div style={{ marginTop: 10, fontSize: 9, color: "var(--mu)", textAlign: "center", fontStyle: "italic" }}>
-              Loan balances entered manually · update in OwnerPayback.jsx when contributions change
+              Due-from-Anthony pulled live from QBO · contribution principals entered manually
             </div>
           </div>
         </div>

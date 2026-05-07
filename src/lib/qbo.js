@@ -1,4 +1,5 @@
-const QBO_BASE = "https://cfo-dashboard-eta.vercel.app/api/qbo-pnl?company=ce_east";
+const PNL_BASE = "https://cfo-dashboard-eta.vercel.app/api/qbo-pnl?company=ce_east";
+const BS_BASE  = "https://cfo-dashboard-eta.vercel.app/api/qbo-bs?company=ce_east";
 
 const pad = (n) => String(n).padStart(2, "0");
 
@@ -7,12 +8,20 @@ export const fmtDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad
 const lastDayOfMonth = (year, month0) => new Date(year, month0 + 1, 0).getDate();
 
 export const fetchPnl = async (start, end) => {
-  const url = `${QBO_BASE}&start_date=${start}&end_date=${end}`;
+  const url = `${PNL_BASE}&start_date=${start}&end_date=${end}`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`QBO P&L ${start}..${end}: HTTP ${res.status}`);
   const data = await res.json();
   if (data.error) throw new Error(`QBO: ${data.error}`);
   return data.report;
+};
+
+export const fetchBs = async () => {
+  const res = await fetch(BS_BASE, { cache: "no-store" });
+  if (!res.ok) throw new Error(`QBO BS: HTTP ${res.status}`);
+  const data = await res.json();
+  if (data.error) throw new Error(`QBO: ${data.error}`);
+  return data.bs;
 };
 
 // Pull everything Owner Payback needs in parallel.
@@ -35,10 +44,11 @@ export const fetchOwnerPaybackData = async () => {
     });
   }
 
-  const [allTime, ytd, lastYear, ...monthReports] = await Promise.all([
+  const [allTime, ytd, lastYear, bs, ...monthReports] = await Promise.all([
     fetchPnl("2020-01-01", todayStr),                                  // since inception (CE East formed 2025)
     fetchPnl(`${yearNow}-01-01`, todayStr),                            // YTD
     fetchPnl(`${yearNow - 1}-01-01`, `${yearNow - 1}-12-31`),          // prior full year
+    fetchBs(),                                                          // current BS (Due From Anthony, etc.)
     ...months.map((m) => fetchPnl(m.start, m.end)),
   ]);
 
@@ -46,6 +56,7 @@ export const fetchOwnerPaybackData = async () => {
     allTime,
     ytd,
     lastYear,
+    bs,
     months: months.map((m, i) => ({ ...m, report: monthReports[i] })),
     ytdDays: Math.ceil((today - new Date(`${yearNow}-01-01`)) / (1000 * 60 * 60 * 24)) + 1,
   };
