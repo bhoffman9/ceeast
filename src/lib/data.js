@@ -5,6 +5,7 @@ const NUM_COLS = new Set([
   "invoice_amount",
   "funded",
   "reserves",
+  "reserves_excel",
   "released_reserves",
   "fees",
   "carrier_pay",

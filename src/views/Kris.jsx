@@ -25,16 +25,28 @@ export default function Kris() {
 
   const lines = useMemo(() => {
     return onServices.map((l) => {
+      // Negative funded counts — when a load loses money Kris's commission goes
+      // negative too. Confirmed with Ben against the 2/25/26 payment: invoice 38013
+      // had funded = -$565, contributing -$141.25 to Kris's commission, and the
+      // batch still totaled the right $613.25.
       const funded = Number(l.funded || 0);
-      const reserve = Number(l.release_amount || l.reserves || 0);
-      const fundedComm = funded > 0 ? funded * KRIS_RATE : 0;
-      const reserveComm = l.released ? reserve * KRIS_RATE : 0;
+      const fundedComm = funded * KRIS_RATE;
+      // For the reserve leg: use the actual released amount when the load is
+      // released (released_reserves preserves the real Triumph/Flexent paid-out
+      // figure — old Triumph loads were ~3.25%, not 5%). For unreleased loads,
+      // estimate at the current 5% Flexent rate (the `reserves` column).
+      const actualReserve = Number(l.released_reserves || l.release_amount || l.reserves || 0);
+      const projectedReserve = Number(l.reserves || 0);
+      const reserveComm = l.released ? actualReserve * KRIS_RATE : 0;
+      const reserveCommPotential = projectedReserve * KRIS_RATE;
       return {
         ...l,
+        actualReserve,
+        projectedReserve,
         fundedComm,
         reserveComm,
+        reserveCommPotential,
         totalDue: fundedComm + reserveComm,
-        reserveCommPotential: reserve * KRIS_RATE,
       };
     }).sort((a, b) => String(b.invoice_date || "").localeCompare(String(a.invoice_date || "")));
   }, [onServices]);
@@ -149,23 +161,26 @@ export default function Kris() {
               </tr>
             </thead>
             <tbody>
-              {visibleLines.map((l) => (
-                <tr key={l.invoice_number}>
-                  <td>{l.invoice_number}</td>
-                  <td>{fdate(l.invoice_date)}</td>
-                  <td>{fd(l.invoice_amount, 0)}</td>
-                  <td>{fd(l.funded, 2)}</td>
-                  <td style={{ color: "#3ddc84" }}>{fd(l.fundedComm, 2)}</td>
-                  <td style={{ fontSize: 11, color: l.released ? "#3ddc84" : "var(--mu)" }}>
-                    {l.released ? (l.release_date ? fdate(l.release_date) : "yes") : "no"}
-                  </td>
-                  <td>{fd(l.released ? (l.release_amount || l.reserves || 0) : (l.reserves || 0), 2)}</td>
-                  <td style={{ color: l.released ? "#3ddc84" : "#f5c542" }}>
-                    {fd(l.released ? l.reserveComm : l.reserveCommPotential, 2)}
-                  </td>
-                  <td style={{ fontWeight: 600 }}>{fd(l.totalDue + (l.released ? 0 : l.reserveCommPotential), 2)}</td>
-                </tr>
-              ))}
+              {visibleLines.map((l) => {
+                const negFunded = l.fundedComm < 0;
+                return (
+                  <tr key={l.invoice_number}>
+                    <td>{l.invoice_number}</td>
+                    <td>{fdate(l.invoice_date)}</td>
+                    <td>{fd(l.invoice_amount, 0)}</td>
+                    <td style={{ color: l.funded < 0 ? "#ff5252" : undefined }}>{fd(l.funded, 2)}</td>
+                    <td style={{ color: negFunded ? "#ff5252" : "#3ddc84" }}>{fd(l.fundedComm, 2)}</td>
+                    <td style={{ fontSize: 11, color: l.released ? "#3ddc84" : "var(--mu)" }}>
+                      {l.released ? (l.release_date ? fdate(l.release_date) : "yes") : "no"}
+                    </td>
+                    <td>{fd(l.released ? l.actualReserve : l.projectedReserve, 2)}</td>
+                    <td style={{ color: l.released ? "#3ddc84" : "#f5c542" }}>
+                      {fd(l.released ? l.reserveComm : l.reserveCommPotential, 2)}
+                    </td>
+                    <td style={{ fontWeight: 600 }}>{fd(l.totalDue + (l.released ? 0 : l.reserveCommPotential), 2)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
