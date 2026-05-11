@@ -80,7 +80,7 @@ The component file is still named `OwnerPayback.jsx` for git history; the displa
 
 Top-level tabs in [src/App.jsx](src/App.jsx):
 1. **Income** (default) — live QBO P&L + BS, distribution estimator, shareholder payback tracker
-2. **Reserves** — sub-tabs: **Unreleased** (default — live exposure) and **Released** (customer rollup)
+2. **Reserves** — sub-tabs: **Unreleased** (default — live exposure) and **Released** (this-week transfer panel + all-time customer rollup)
 
 The Reserves sub-tab default is `unreleased` because that's the live exposure — Released is a historical roll-up.
 
@@ -205,6 +205,7 @@ The Excel itself is gitignored (payroll, contact info, expenses). PDFs are also 
 - **CSV money columns are coerced to numbers** in `src/lib/data.js`. New numeric columns must be added to `NUM_COLS`.
 - **Unreleased = `released === false` in `loads.csv`**. PDF Pmt rows are the authoritative signal for the Flexent era; Excel `RELEASED RESERVES` keying is only trusted for pre-Flexent (Triumph-era) loads where no PDF exists.
 - **Default Reserves sub-tab is Unreleased** — that's the live exposure. Don't change without a reason.
+- **"Reserves to Transfer — This Week"** is the gold-bordered panel at the top of the Released sub-tab. It's a 7-day rolling window anchored on the most recent `release_date` in the data (NOT today's date — the panel stays useful even if the pipeline hasn't been re-run this week). Window length is `TRANSFER_WINDOW_DAYS` in [src/views/Reserves/Released.jsx](src/views/Reserves/Released.jsx).
 - **Loan principals are hardcoded.** Ben confirmed Anthony repaid in full 2026-05-07. Update `SHAREHOLDER` constant in `OwnerPayback.jsx` if a new contribution happens.
 - **Income tab depends on the CFO dashboard staying live.** Loose coupling per Ben's decision (Path B).
 

@@ -1,8 +1,14 @@
 import { useMemo, useState } from "react";
 import { fd, fdate } from "../../lib/format";
 
+// 7-day rolling window anchored on the most recent release_date in the data.
+// Each weekly process.py run advances the anchor, so this view always shows
+// "the latest batch of Flexent payouts that need to be transferred."
+const TRANSFER_WINDOW_DAYS = 7;
+
 export default function Released({ rows }) {
   const [expanded, setExpanded] = useState(false);
+  const [weekExpanded, setWeekExpanded] = useState(true);
 
   const totals = useMemo(() => ({
     count: rows.length,
@@ -10,6 +16,40 @@ export default function Released({ rows }) {
     reserve: rows.reduce((s, r) => s + (r.reserves || 0), 0),
     released: rows.reduce((s, r) => s + (r.release_amount || r.released_reserves || r.reserves || 0), 0),
   }), [rows]);
+
+  // "This week" = trailing TRANSFER_WINDOW_DAYS from the latest release_date seen.
+  // Anchoring on the data (not today) means the panel stays useful even if the
+  // pipeline hasn't been re-run yet this week.
+  const thisWeek = useMemo(() => {
+    const dated = rows.filter((r) => r.release_date);
+    if (!dated.length) return { rows: [], start: null, end: null, total: 0, count: 0 };
+    const sorted = [...dated].sort((a, b) => String(b.release_date).localeCompare(String(a.release_date)));
+    const end = sorted[0].release_date;
+    const endDate = new Date(end);
+    const startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() - (TRANSFER_WINDOW_DAYS - 1));
+    const startIso = startDate.toISOString().slice(0, 10);
+    const windowRows = dated.filter((r) => r.release_date >= startIso && r.release_date <= end);
+    const total = windowRows.reduce((s, r) => s + (r.release_amount || r.released_reserves || r.reserves || 0), 0);
+    return { rows: windowRows, start: startIso, end, total, count: windowRows.length };
+  }, [rows]);
+
+  const thisWeekByCustomer = useMemo(() => {
+    const map = new Map();
+    for (const r of thisWeek.rows) {
+      const k = r.customer || "—";
+      const cur = map.get(k) || { customer: k, count: 0, released: 0 };
+      cur.count += 1;
+      cur.released += r.release_amount || r.released_reserves || r.reserves || 0;
+      map.set(k, cur);
+    }
+    return [...map.values()].sort((a, b) => b.released - a.released);
+  }, [thisWeek.rows]);
+
+  const thisWeekDetail = useMemo(
+    () => [...thisWeek.rows].sort((a, b) => String(b.release_date || "").localeCompare(String(a.release_date || ""))),
+    [thisWeek.rows],
+  );
 
   const byCustomer = useMemo(() => {
     const map = new Map();
@@ -30,6 +70,90 @@ export default function Released({ rows }) {
 
   return (
     <div>
+      {thisWeek.count > 0 && (
+        <div
+          className="card"
+          style={{
+            marginBottom: 14,
+            border: "1px solid #f5c542",
+            background: "linear-gradient(180deg, rgba(245,197,66,0.08) 0%, rgba(245,197,66,0.02) 100%)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <div>
+              <div className="ctit" style={{ marginBottom: 2, color: "#f5c542" }}>Reserves to Transfer — This Week</div>
+              <div style={{ fontSize: 11, color: "var(--mu)" }}>
+                Flexent payouts {fdate(thisWeek.start)} → {fdate(thisWeek.end)}
+              </div>
+            </div>
+            <button className="input" style={{ cursor: "pointer" }} onClick={() => setWeekExpanded((e) => !e)}>
+              {weekExpanded ? "Hide detail" : "Show detail"}
+            </button>
+          </div>
+
+          <div className="g4" style={{ marginBottom: weekExpanded ? 14 : 0 }}>
+            <Kpi label="Loads Released" value={thisWeek.count} color="#f5c542" />
+            <Kpi label="Amount to Transfer" value={fd(thisWeek.total, 0)} color="#f5c542" big />
+            <Kpi label="Customers Paid" value={thisWeekByCustomer.length} color="#f5c542" />
+            <Kpi label="Window" value={`${TRANSFER_WINDOW_DAYS}d`} color="#f5c542" />
+          </div>
+
+          {weekExpanded && (
+            <>
+              <table className="tbl" style={{ marginBottom: 12 }}>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Loads</th>
+                    <th>Released</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {thisWeekByCustomer.map((c) => (
+                    <tr key={c.customer}>
+                      <td>{c.customer}</td>
+                      <td>{c.count}</td>
+                      <td>{fd(c.released, 0)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td>Total</td>
+                    <td>{thisWeek.count}</td>
+                    <td>{fd(thisWeek.total, 0)}</td>
+                  </tr>
+                </tfoot>
+              </table>
+              <div style={{ overflowX: "auto" }}>
+                <table className="tbl">
+                  <thead>
+                    <tr>
+                      <th>Released</th>
+                      <th>Invoice</th>
+                      <th>Customer</th>
+                      <th>Carrier</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {thisWeekDetail.map((r, i) => (
+                      <tr key={r.invoice_number || i}>
+                        <td>{r.release_date ? fdate(r.release_date) : "—"}</td>
+                        <td>{r.invoice_number}</td>
+                        <td>{r.customer || "—"}</td>
+                        <td>{r.carrier || "—"}</td>
+                        <td>{fd(r.release_amount || r.released_reserves || r.reserves || 0, 0)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="g4" style={{ marginBottom: 14 }}>
         <Kpi label="Released Loads" value={totals.count} color="#3ddc84" />
         <Kpi label="Gross" value={fd(totals.gross, 0)} color="#3ddc84" />
