@@ -210,18 +210,29 @@ def parse_excel(path: Path) -> list[dict]:
 # ── PDF helpers ──────────────────────────────────────────────────
 
 # Match a Flexent reserve activity Pmt row. Layout:
-#   <invoice>  <po/ref>  <check>  <debtor (multi-word)>  <date>  <days>  Pmt  <amount>  ...  <reserve_amt>  <balance>
+#   <invoice>  <po/ref>  <check>  <debtor (multi-word)>  <inv_date>  <days>  Pmt  <amount>  ...  <reserve_amt>  <balance>
+# IMPORTANT: <inv_date> here is the *invoice* date, NOT the release date. The actual
+# release date is on the section header line above ("M/D/YYYY Cash Payment Report#NNN").
+# We track that header date as we walk and stamp it onto every subsequent Pmt row.
 PMT_RE = re.compile(
-    r"^(?P<invoice>\S+)\s+\S+\s+\S+\s+.*?\s+(?P<date>\d{1,2}/\d{1,2}/\d{4})\s+\d+\s+Pmt\s+(?P<amount>[\d,]+\.\d{2})"
+    r"^(?P<invoice>\S+)\s+\S+\s+\S+\s+.*?\s+(?P<inv_date>\d{1,2}/\d{1,2}/\d{4})\s+\d+\s+Pmt\s+(?P<amount>[\d,]+\.\d{2})"
+)
+RELEASE_HEADER_RE = re.compile(
+    r"^(?P<release_date>\d{1,2}/\d{1,2}/\d{4})\s+Cash Payment Report#"
 )
 
 
 def parse_pdf(pdf_path: Path) -> list[dict]:
     rows = []
+    current_release_date = ""
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
             text = page.extract_text() or ""
             for line in text.splitlines():
+                h = RELEASE_HEADER_RE.match(line)
+                if h:
+                    current_release_date = _to_iso(h.group("release_date"))
+                    continue
                 m = PMT_RE.match(line)
                 if not m:
                     continue
@@ -231,7 +242,7 @@ def parse_pdf(pdf_path: Path) -> list[dict]:
                 rows.append({
                     "invoice_number": base_inv,
                     "released": "true",
-                    "release_date": _to_iso(m.group("date")),
+                    "release_date": current_release_date,
                     "release_amount": m.group("amount").replace(",", ""),
                     "source_pdf": pdf_path.name,
                 })
