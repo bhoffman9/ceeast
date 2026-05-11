@@ -3,7 +3,9 @@ process.py — CE East master pipeline.
 
 Reads:
   incoming/*.xlsx   — CE East load book (source of truth: status, $, release flag)
-  incoming/*.pdf    — Flexent reserve detail reports (cross-check + release dates)
+  incoming/*.pdf    — NEW Flexent reserve detail reports (cross-check + release dates)
+  docs/*.pdf        — PREVIOUSLY archived Flexent PDFs, re-read every run so PDF-only
+                      release flags never drop off when a new weekly report is added.
 
 Writes:
   public/data/loads.csv          — every CE East load, with `released` derived from
@@ -14,7 +16,7 @@ Writes:
                                    loads.csv only).
 
 Side effects:
-  PDFs in incoming/ are moved to docs/ after parsing.
+  New PDFs in incoming/ are moved to docs/ after parsing. PDFs already in docs/ stay put.
   Excel files stay in incoming/ — they're live, the user keeps updating them.
 
 Usage:
@@ -259,22 +261,35 @@ def main() -> int:
         print(f"  note:  deduped {parsed_total - len(loads)} duplicate invoice rows")
 
     # 2) PDFs -> release events (cross-check + dates)
-    pdf_files = sorted(INCOMING.glob("*.pdf"))
+    # Read NEW PDFs from incoming/ AND every archived PDF from docs/ so PDF-only
+    # release flags persist across weeks — Flexent reports are cumulative-only for
+    # the current period, so once a Pmt row drops off a newer report we'd lose it
+    # if we didn't keep re-parsing the archive.
+    ARCHIVE.mkdir(exist_ok=True)
+    new_pdfs = sorted(INCOMING.glob("*.pdf"))
+    archived_pdfs = sorted(ARCHIVE.glob("*.pdf"))
     pdf_releases: dict[str, dict] = {}
-    for pdf in pdf_files:
+
+    def _ingest(pdf: Path, archive_after: bool) -> None:
         try:
             rows = parse_pdf(pdf)
         except Exception as e:
             print(f"  ! {pdf.name}: {e}")
-            continue
+            return
         new_count = 0
         for r in rows:
             if r["invoice_number"] not in pdf_releases:
                 new_count += 1
             pdf_releases[r["invoice_number"]] = r
-        print(f"  pdf:   {pdf.name} -> {len(rows)} Pmt rows ({new_count} unique)")
-        ARCHIVE.mkdir(exist_ok=True)
-        shutil.move(str(pdf), ARCHIVE / pdf.name)
+        label = "pdf-new" if archive_after else "pdf-arc"
+        print(f"  {label}: {pdf.name} -> {len(rows)} Pmt rows ({new_count} unique)")
+        if archive_after:
+            shutil.move(str(pdf), ARCHIVE / pdf.name)
+
+    for pdf in archived_pdfs:
+        _ingest(pdf, archive_after=False)
+    for pdf in new_pdfs:
+        _ingest(pdf, archive_after=True)
 
     # 3) Cross-merge: PDF date overrides Excel-only release; PDF Pmt without Excel flag also released
     pdf_only_count = 0
