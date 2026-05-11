@@ -81,6 +81,7 @@ The component file is still named `OwnerPayback.jsx` for git history; the displa
 Top-level tabs in [src/App.jsx](src/App.jsx):
 1. **Income** (default) — live QBO P&L + BS, distribution estimator, shareholder payback tracker
 2. **Reserves** — sub-tabs: **Unreleased** (default — live exposure) and **Released** (this-week transfer panel + all-time customer rollup)
+3. **Kris** — On Services partner commission tracker. Kris gets 25% of `funded` per load + 25% of released reserves for `customer = "On Services"` loads.
 
 The Reserves sub-tab default is `unreleased` because that's the live exposure — Released is a historical roll-up.
 
@@ -115,6 +116,29 @@ Both endpoints have CORS open (`*`). The CFO dashboard owns the QBO OAuth tokens
 - `OWNERS` array — distribution % splits (Chris 45 / Anthony 45 / Gabriel 4 / Jon 6)
 
 Loan principals stay hardcoded because QBO's "Shareholder Contributions - Chris" equity account shows the *current* balance after distributions, not the original deposit.
+
+---
+
+## Tab 3: Kris — On Services Commission
+
+Kris is a partner whose commission is tied to On Services loads only:
+- **Funded commission** = 25% × `funded` (the CSV column) — earned once the load is funded, regardless of release
+- **Reserve commission** = 25% × released reserves — earned when Flexent releases the 5% reserve
+
+Both legs sum to "Total Kris" per load. Pending reserve commission is shown in yellow for unreleased loads.
+
+Data: filtered from `public/data/loads.csv` (`customer === "On Services"`) + `public/data/kris_payments.csv` (manually maintained record of payments made to Kris).
+
+### kris_payments.csv schema
+```
+payment_date, payment_amount, notes
+```
+Append a new row whenever Kris is paid. The dashboard sums all payments and subtracts from total earned to compute Outstanding. No per-invoice allocation needed — lump-sum tracking is the model.
+
+### Initial seed (2026-05-11)
+- 2026-01-29 $620.00 — funded commission for invoices 37077/37078/37079/37080 (4 × $155)
+- 2026-02-25 $613.25 — mixed batch, composition unverified (Ben to confirm)
+- 2026-03-20 $1,147.50 — funded commission for Section 2 batch: 38247/38248/38249/38496/38498
 
 ---
 

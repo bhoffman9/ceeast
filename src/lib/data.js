@@ -42,3 +42,11 @@ const fetchCsv = async (path) => {
 export const loadReservesData = async () => {
   return await fetchCsv("/data/loads.csv");
 };
+
+export const loadKrisPayments = async () => {
+  const rows = await fetchCsv("/data/kris_payments.csv");
+  return rows.map((r) => ({
+    ...r,
+    payment_amount: Number(String(r.payment_amount || "0").replace(/[$,]/g, "")) || 0,
+  }));
+};
