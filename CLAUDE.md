@@ -157,6 +157,7 @@ released, release_date, release_amount, release_source
 ```
 invoice_number, released, release_date, release_amount, source_pdf
 ```
+Flexent's `CliRsvRept` PDF covers BOTH CE and CE East under the same client number (1107208). `process.py` intersects PDF Pmt rows against the Excel load book and drops the CE-only rows (typically the 7-digit `2000xxx`/`2001xxx` invoice range, plus any 5-digit invoices not in CE East's Excel). The Excel is the canonical CE East invoice list.
 
 ### Reserve calculation
 Flexent holds **5% of every funded invoice** as reserve. When the customer pays, that 5% is released back. `process.py` computes this per load (`RESERVE_RATE = 0.05`) — the dashboard never trusts the Excel `RESERVES` column directly because:

@@ -337,13 +337,19 @@ def main() -> int:
             w.writerow({k: ("" if v is None else v) for k, v in r.items()})
     print(f"wrote {OUT_LOADS.relative_to(BASE)} ({len(loads)} loads)")
 
-    # 5) Write reserve_status.csv (PDF-only, audit/cross-check artifact)
+    # 5) Write reserve_status.csv (PDF-only, audit/cross-check artifact).
+    # Flexent's CliRsvRept covers BOTH CE and CE East under the same client number
+    # (1107208). The Excel load book is the canonical list of CE East invoices, so we
+    # intersect against it here to drop CE-only Pmt rows as noise.
+    excel_invs = {r["invoice_number"] for r in loads}
+    filtered = {inv: r for inv, r in pdf_releases.items() if inv in excel_invs}
+    dropped = len(pdf_releases) - len(filtered)
     with OUT_RESERVES.open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["invoice_number", "released", "release_date", "release_amount", "source_pdf"])
         w.writeheader()
-        for inv in sorted(pdf_releases):
-            w.writerow(pdf_releases[inv])
-    print(f"wrote {OUT_RESERVES.relative_to(BASE)} ({len(pdf_releases)} PDF release events)")
+        for inv in sorted(filtered):
+            w.writerow(filtered[inv])
+    print(f"wrote {OUT_RESERVES.relative_to(BASE)} ({len(filtered)} CE East PDF release events; dropped {dropped} CE-only rows as noise)")
 
     # 6) Summary
     released = sum(1 for r in loads if r["released"] == "true")

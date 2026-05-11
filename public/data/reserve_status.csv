@@ -1,342 +1,29 @@
 invoice_number,released,release_date,release_amount,source_pdf
-2000121,true,2026-04-15,600.00,CliRsvRept (1).pdf
-2000122,true,2026-04-15,600.00,CliRsvRept (1).pdf
-2000153,true,2026-05-05,2397.00,CliRsvRept.pdf
-2000156,true,2026-04-15,600.00,CliRsvRept (1).pdf
-2000157,true,2026-04-15,650.00,CliRsvRept (1).pdf
-2000161,true,2026-05-01,700.00,CliRsvRept.pdf
-2000162,true,2026-05-01,1650.00,CliRsvRept.pdf
-2000217,true,2026-04-20,350.00,CliRsvRept (1).pdf
-2000270,true,2026-05-01,1200.00,CliRsvRept.pdf
-2000305,true,2026-05-01,800.00,CliRsvRept.pdf
-2000313,true,2026-04-15,650.00,CliRsvRept (1).pdf
-2000347,true,2026-04-15,600.00,CliRsvRept (1).pdf
-2000348,true,2026-04-15,600.00,CliRsvRept (1).pdf
-2000349,true,2026-04-15,600.00,CliRsvRept (1).pdf
-2000350,true,2026-04-15,600.00,CliRsvRept (1).pdf
-2000375,true,2026-05-06,7400.00,CliRsvRept.pdf
-2000397,true,2026-05-06,1400.00,CliRsvRept.pdf
-2000419,true,2026-05-06,1400.00,CliRsvRept.pdf
-2000441,true,2026-05-06,1400.00,CliRsvRept.pdf
-2000442,true,2026-05-06,1400.00,CliRsvRept.pdf
-2000453,true,2026-05-01,7300.00,CliRsvRept.pdf
-2000458,true,2026-04-23,700.00,CliRsvRept (1).pdf
-2000459,true,2026-05-01,3700.00,CliRsvRept.pdf
-2000497,true,2026-05-01,1400.00,CliRsvRept.pdf
 2000499,true,2026-05-01,1100.00,CliRsvRept.pdf
-2000502,true,2026-05-01,900.00,CliRsvRept.pdf
-2000523,true,2026-05-06,1600.00,CliRsvRept.pdf
-2000530,true,2026-05-01,1500.00,CliRsvRept.pdf
-2000557,true,2026-05-06,700.00,CliRsvRept.pdf
-2000558,true,2026-05-06,650.00,CliRsvRept.pdf
-2000591,true,2026-05-06,750.00,CliRsvRept.pdf
-2000602,true,2026-05-06,500.00,CliRsvRept.pdf
-2000603,true,2026-05-06,600.00,CliRsvRept.pdf
-2000604,true,2026-05-06,500.00,CliRsvRept.pdf
-2000605,true,2026-05-06,500.00,CliRsvRept.pdf
-2000609,true,2026-05-06,7200.00,CliRsvRept.pdf
-2000747,true,2026-05-06,4800.00,CliRsvRept.pdf
-2000773,true,2026-05-06,500.00,CliRsvRept.pdf
-2000784,true,2026-05-06,3600.00,CliRsvRept.pdf
-2000785,true,2026-05-06,3600.00,CliRsvRept.pdf
-2000799,true,2026-05-04,350.00,CliRsvRept.pdf
-2000841,true,2026-05-04,350.00,CliRsvRept.pdf
-2000859,true,2026-05-07,625.00,CliRsvRept.pdf
-2000860,true,2026-05-05,625.00,CliRsvRept.pdf
-2000918,true,2026-05-04,350.00,CliRsvRept.pdf
-2000924,true,2026-05-05,7200.00,CliRsvRept.pdf
-2000960,true,2026-05-05,3600.00,CliRsvRept.pdf
-2001172,true,2026-05-06,650.00,CliRsvRept.pdf
-2001173,true,2026-05-06,650.00,CliRsvRept.pdf
-35201,true,2026-04-22,2600.00,CliRsvRept (1).pdf
-36452,true,2026-04-22,1600.00,CliRsvRept (1).pdf
-36517,true,2026-03-27,2400.00,CliRsvRept (2).pdf
-36524,true,2026-03-27,180.00,CliRsvRept (2).pdf
-36531,true,2026-03-27,6000.00,CliRsvRept (2).pdf
-36533,true,2026-03-27,4000.00,CliRsvRept (2).pdf
-36544,true,2026-03-27,2000.00,CliRsvRept (2).pdf
-36549,true,2026-03-27,8400.00,CliRsvRept (2).pdf
-36550,true,2026-03-27,7000.00,CliRsvRept (2).pdf
-36555,true,2026-03-27,1600.00,CliRsvRept (2).pdf
-36562,true,2026-03-27,6200.00,CliRsvRept (2).pdf
-36564,true,2026-03-27,8800.00,CliRsvRept (2).pdf
-36574,true,2026-03-27,6500.00,CliRsvRept (2).pdf
-36592,true,2026-03-27,2400.00,CliRsvRept (2).pdf
-36632,true,2026-04-22,1225.00,CliRsvRept (1).pdf
-36657,true,2026-03-27,7000.00,CliRsvRept (2).pdf
-36693,true,2026-04-22,3600.00,CliRsvRept (1).pdf
-36694,true,2026-04-22,3600.00,CliRsvRept (1).pdf
-36696,true,2026-03-27,4000.00,CliRsvRept (2).pdf
-36697,true,2026-04-03,6000.00,CliRsvRept (1).pdf
-36706,true,2026-04-03,6200.00,CliRsvRept (1).pdf
-36708,true,2026-03-27,1600.00,CliRsvRept (2).pdf
-36746,true,2026-04-22,2550.00,CliRsvRept (1).pdf
-36765,true,2026-03-27,2400.00,CliRsvRept (2).pdf
-36766,true,2026-04-03,2400.00,CliRsvRept (1).pdf
-36767,true,2026-04-03,1600.00,CliRsvRept (1).pdf
-36797,true,2026-04-03,7800.00,CliRsvRept (1).pdf
-36798,true,2026-04-03,8000.00,CliRsvRept (1).pdf
-36799,true,2026-04-03,2000.00,CliRsvRept (1).pdf
-36803,true,2026-04-03,2400.00,CliRsvRept (1).pdf
-36822,true,2026-04-03,1600.00,CliRsvRept (1).pdf
-36841,true,2026-04-22,3200.00,CliRsvRept (1).pdf
-36843,true,2026-03-27,450.00,CliRsvRept (2).pdf
-36855,true,2026-04-03,3200.00,CliRsvRept (1).pdf
 36858,true,2026-04-07,7750.00,CliRsvRept (1).pdf
-36860,true,2026-04-22,3000.00,CliRsvRept (1).pdf
-36861,true,2026-03-27,500.00,CliRsvRept (2).pdf
-36880,true,2026-04-10,4500.00,CliRsvRept (1).pdf
-36881,true,2026-04-03,7500.00,CliRsvRept (1).pdf
-36883,true,2026-04-03,4000.00,CliRsvRept (1).pdf
-36884,true,2026-04-03,6000.00,CliRsvRept (1).pdf
-36891,true,2026-04-03,1600.00,CliRsvRept (1).pdf
-36912,true,2026-04-10,1600.00,CliRsvRept (1).pdf
-36913,true,2026-04-10,2400.00,CliRsvRept (1).pdf
-36914,true,2026-04-03,8000.00,CliRsvRept (1).pdf
-36915,true,2026-04-10,600.00,CliRsvRept (1).pdf
-36916,true,2026-04-03,7600.00,CliRsvRept (1).pdf
-36917,true,2026-04-22,1600.00,CliRsvRept (1).pdf
-36919,true,2026-04-22,1600.00,CliRsvRept (1).pdf
-36933,true,2026-04-10,7800.00,CliRsvRept (1).pdf
-36934,true,2026-04-10,6200.00,CliRsvRept (1).pdf
-36951,true,2026-04-10,8800.00,CliRsvRept (1).pdf
-36952,true,2026-04-10,6200.00,CliRsvRept (1).pdf
-36953,true,2026-04-10,7800.00,CliRsvRept (1).pdf
-36965,true,2026-04-22,1600.00,CliRsvRept (1).pdf
 36972,true,2026-04-07,8450.00,CliRsvRept (1).pdf
-36983,true,2026-04-10,4000.00,CliRsvRept (1).pdf
-36984,true,2026-04-10,6000.00,CliRsvRept (1).pdf
-36986,true,2026-04-22,2400.00,CliRsvRept (1).pdf
 37002,true,2026-04-07,7125.00,CliRsvRept (1).pdf
-37003,true,2026-04-22,1000.00,CliRsvRept (1).pdf
-37004,true,2026-04-22,1000.00,CliRsvRept (1).pdf
-37005,true,2026-04-22,1000.00,CliRsvRept (1).pdf
-37006,true,2026-04-22,1000.00,CliRsvRept (1).pdf
-37011,true,2026-04-10,4000.00,CliRsvRept (1).pdf
-37012,true,2026-04-10,6000.00,CliRsvRept (1).pdf
-37013,true,2026-04-22,1600.00,CliRsvRept (1).pdf
-37016,true,2026-04-22,3000.00,CliRsvRept (1).pdf
-37029,true,2026-04-10,2000.00,CliRsvRept (1).pdf
-37033,true,2026-04-10,2000.00,CliRsvRept (1).pdf
-37066,true,2026-04-22,5400.00,CliRsvRept (1).pdf
-37075,true,2026-04-24,1600.00,CliRsvRept (1).pdf
-37091,true,2026-04-22,6800.00,CliRsvRept (1).pdf
-37110,true,2026-04-10,1800.00,CliRsvRept (1).pdf
-37111,true,2026-04-10,2000.00,CliRsvRept (1).pdf
-37122,true,2026-04-24,4000.00,CliRsvRept (1).pdf
-37123,true,2026-04-24,6000.00,CliRsvRept (1).pdf
-37139,true,2026-04-24,1600.00,CliRsvRept (1).pdf
-37147,true,2026-04-24,9400.00,CliRsvRept (1).pdf
-37163,true,2026-04-24,1800.00,CliRsvRept (1).pdf
-37215,true,2026-04-10,650.00,CliRsvRept (1).pdf
-37229,true,2026-04-24,4000.00,CliRsvRept (1).pdf
-37230,true,2026-04-24,6000.00,CliRsvRept (1).pdf
-37238,true,2026-04-24,6700.00,CliRsvRept (1).pdf
-37239,true,2026-05-07,6500.00,CliRsvRept.pdf
-37280,true,2026-04-24,8000.00,CliRsvRept (1).pdf
-37281,true,2026-04-24,2000.00,CliRsvRept (1).pdf
-37365,true,2026-04-24,4000.00,CliRsvRept (1).pdf
-37366,true,2026-04-24,6000.00,CliRsvRept (1).pdf
-37434,true,2026-04-24,1600.00,CliRsvRept (1).pdf
-37442,true,2026-04-24,650.00,CliRsvRept (1).pdf
-37443,true,2026-04-24,650.00,CliRsvRept (1).pdf
-37472,true,2026-05-07,8000.00,CliRsvRept.pdf
-37479,true,2026-04-07,650.00,CliRsvRept (1).pdf
-37486,true,2026-04-07,820.00,CliRsvRept (1).pdf
-37487,true,2026-04-07,350.00,CliRsvRept (1).pdf
-37488,true,2026-04-07,650.00,CliRsvRept (1).pdf
-37489,true,2026-04-07,650.00,CliRsvRept (1).pdf
-37490,true,2026-04-07,650.00,CliRsvRept (1).pdf
-37491,true,2026-04-07,650.00,CliRsvRept (1).pdf
-37492,true,2026-04-07,820.00,CliRsvRept (1).pdf
-37516,true,2026-04-07,4500.00,CliRsvRept (1).pdf
-37517,true,2026-04-07,300.00,CliRsvRept (1).pdf
-37521,true,2026-04-24,7200.00,CliRsvRept (1).pdf
-37524,true,2026-04-24,850.00,CliRsvRept (1).pdf
-37569,true,2026-05-07,3800.00,CliRsvRept.pdf
-37670,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37671,true,2026-04-13,2100.00,CliRsvRept (1).pdf
 37699,true,2026-04-21,765.00,CliRsvRept (1).pdf
-37751,true,2026-04-07,725.00,CliRsvRept (1).pdf
-37752,true,2026-04-07,725.00,CliRsvRept (1).pdf
-37753,true,2026-04-07,725.00,CliRsvRept (1).pdf
-37765,true,2026-04-07,3200.00,CliRsvRept (1).pdf
-37822,true,2026-04-07,725.00,CliRsvRept (1).pdf
-37823,true,2026-04-07,725.00,CliRsvRept (1).pdf
-37824,true,2026-04-07,725.00,CliRsvRept (1).pdf
-37825,true,2026-04-07,725.00,CliRsvRept (1).pdf
-37860,true,2026-03-19,2200.00,CliRsvRept (2).pdf
 37861,true,2026-03-25,1500.00,CliRsvRept (2).pdf
-37862,true,2026-03-19,2200.00,CliRsvRept (2).pdf
-37863,true,2026-03-19,2200.00,CliRsvRept (2).pdf
-37864,true,2026-03-19,2200.00,CliRsvRept (2).pdf
-37869,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37870,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37871,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37872,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37873,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37874,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37875,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37876,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37877,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37878,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37879,true,2026-04-07,750.00,CliRsvRept (1).pdf
 37903,true,2026-04-21,3350.00,CliRsvRept (1).pdf
 37904,true,2026-04-21,1650.00,CliRsvRept (1).pdf
-37905,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37906,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37907,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37908,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37909,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37910,true,2026-04-07,1500.00,CliRsvRept (1).pdf
-37911,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37912,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37913,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37914,true,2026-04-07,1500.00,CliRsvRept (1).pdf
 37968,true,2026-03-25,1850.00,CliRsvRept (2).pdf
-37982,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37983,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37984,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37985,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37988,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37989,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37990,true,2026-04-07,750.00,CliRsvRept (1).pdf
-37993,true,2026-04-07,750.00,CliRsvRept (1).pdf
-38051,true,2026-04-07,150.00,CliRsvRept (1).pdf
-38052,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38055,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38056,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38068,true,2026-03-25,725.00,CliRsvRept (2).pdf
-38081,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38082,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38083,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38084,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38085,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38086,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38125,true,2026-04-17,7000.00,CliRsvRept (1).pdf
 38132,true,2026-04-21,400.00,CliRsvRept (1).pdf
 38133,true,2026-04-21,400.00,CliRsvRept (1).pdf
 38134,true,2026-03-25,750.00,CliRsvRept (2).pdf
 38135,true,2026-03-25,750.00,CliRsvRept (2).pdf
-38139,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38140,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38141,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38142,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38143,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38144,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38145,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38146,true,2026-04-13,750.00,CliRsvRept (1).pdf
 38147,true,2026-03-25,1750.00,CliRsvRept (2).pdf
 38149,true,2026-03-25,1750.00,CliRsvRept (2).pdf
-38150,true,2026-04-07,650.00,CliRsvRept (1).pdf
-38151,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38152,true,2026-04-13,500.00,CliRsvRept (1).pdf
-38153,true,2026-04-13,650.00,CliRsvRept (1).pdf
-38154,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38155,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38156,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38157,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38158,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38159,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38160,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38161,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38163,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38165,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38169,true,2026-04-13,1800.00,CliRsvRept (1).pdf
-38170,true,2026-04-13,2250.00,CliRsvRept (1).pdf
-38173,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38174,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38175,true,2026-04-13,500.00,CliRsvRept (1).pdf
-38176,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38177,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38178,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38179,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38211,true,2026-03-25,725.00,CliRsvRept (2).pdf
-38223,true,2026-04-07,1500.00,CliRsvRept (1).pdf
-38224,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38229,true,2026-04-13,1800.00,CliRsvRept (1).pdf
-38230,true,2026-04-13,1600.00,CliRsvRept (1).pdf
-38232,true,2026-04-13,1800.00,CliRsvRept (1).pdf
-38233,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38235,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38236,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38237,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38238,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38239,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38260,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38269,true,2026-04-13,650.00,CliRsvRept (1).pdf
-38286,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38287,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38288,true,2026-04-07,500.00,CliRsvRept (1).pdf
-38289,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38290,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38291,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38292,true,2026-04-13,722.03,CliRsvRept (1).pdf
-38293,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38294,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38295,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38300,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38307,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38308,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38321,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38322,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38323,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38328,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38329,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38330,true,2026-04-13,2100.00,CliRsvRept (1).pdf
-38331,true,2026-04-13,2100.00,CliRsvRept (1).pdf
-38332,true,2026-04-13,2100.00,CliRsvRept (1).pdf
 38337,true,2026-04-21,1550.00,CliRsvRept (1).pdf
-38343,true,2026-03-25,750.00,CliRsvRept (2).pdf
-38345,true,2026-04-07,650.00,CliRsvRept (1).pdf
-38352,true,2026-04-07,850.00,CliRsvRept (1).pdf
-38354,true,2026-04-13,650.00,CliRsvRept (1).pdf
 38358,true,2026-03-25,750.00,CliRsvRept (2).pdf
-38361,true,2026-04-07,725.00,CliRsvRept (1).pdf
-38362,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38363,true,2026-04-07,850.00,CliRsvRept (1).pdf
-38364,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38374,true,2026-04-07,7200.00,CliRsvRept (1).pdf
-38375,true,2026-04-07,7200.00,CliRsvRept (1).pdf
-38376,true,2026-04-15,7200.00,CliRsvRept (1).pdf
-38377,true,2026-04-15,7200.00,CliRsvRept (1).pdf
-38380,true,2026-04-07,3200.00,CliRsvRept (1).pdf
-38382,true,2026-04-15,3200.00,CliRsvRept (1).pdf
-38383,true,2026-04-15,3200.00,CliRsvRept (1).pdf
-38384,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38385,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38386,true,2026-04-13,750.00,CliRsvRept (1).pdf
-38387,true,2026-04-13,500.00,CliRsvRept (1).pdf
-38391,true,2026-04-15,9200.00,CliRsvRept (1).pdf
-38392,true,2026-04-15,9200.00,CliRsvRept (1).pdf
 38395,true,2026-03-25,750.00,CliRsvRept (2).pdf
-38396,true,2026-04-07,500.00,CliRsvRept (1).pdf
-38397,true,2026-04-07,500.00,CliRsvRept (1).pdf
-38415,true,2026-03-25,6850.00,CliRsvRept (2).pdf
-38420,true,2026-04-13,750.00,CliRsvRept (1).pdf
 38441,true,2026-04-21,285.00,CliRsvRept (1).pdf
-38463,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38464,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38467,true,2026-04-13,950.00,CliRsvRept (1).pdf
-38468,true,2026-04-13,875.00,CliRsvRept (1).pdf
-38471,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38472,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38473,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38479,true,2026-04-15,4500.00,CliRsvRept (1).pdf
-38480,true,2026-04-15,4500.00,CliRsvRept (1).pdf
 38496,true,2026-04-13,4100.00,CliRsvRept (1).pdf
 38497,true,2026-05-01,4100.00,CliRsvRept.pdf
 38498,true,2026-04-13,4100.00,CliRsvRept (1).pdf
 38499,true,2026-05-01,4100.00,CliRsvRept.pdf
-38502,true,2026-04-13,1025.00,CliRsvRept (1).pdf
 38504,true,2026-04-21,1200.00,CliRsvRept (1).pdf
 38507,true,2026-04-21,1200.00,CliRsvRept (1).pdf
-38512,true,2026-04-15,3200.00,CliRsvRept (1).pdf
-38549,true,2026-04-13,725.00,CliRsvRept (1).pdf
-38618,true,2026-04-07,1850.00,CliRsvRept (1).pdf
-38629,true,2026-04-15,1800.00,CliRsvRept (1).pdf
-38630,true,2026-04-15,1800.00,CliRsvRept (1).pdf
-38633,true,2026-04-07,750.00,CliRsvRept (1).pdf
 38634,true,2026-04-21,950.00,CliRsvRept (1).pdf
 38635,true,2026-04-07,1750.00,CliRsvRept (1).pdf
 38636,true,2026-04-07,1750.00,CliRsvRept (1).pdf
@@ -347,88 +34,35 @@ invoice_number,released,release_date,release_amount,source_pdf
 38667,true,2026-05-04,300.00,CliRsvRept.pdf
 38668,true,2026-04-13,2350.00,CliRsvRept (1).pdf
 38675,true,2026-04-13,2350.00,CliRsvRept (1).pdf
-38695,true,2026-04-07,300.00,CliRsvRept (1).pdf
-38696,true,2026-04-07,515.00,CliRsvRept (1).pdf
-38699,true,2026-04-07,1500.00,CliRsvRept (1).pdf
-38703,true,2026-04-15,8000.00,CliRsvRept (1).pdf
-38704,true,2026-04-15,6400.00,CliRsvRept (1).pdf
-38710,true,2026-04-14,575.00,CliRsvRept (1).pdf
-38711,true,2026-04-22,575.00,CliRsvRept (1).pdf
-38722,true,2026-05-04,725.00,CliRsvRept.pdf
 38755,true,2026-04-21,1000.00,CliRsvRept (1).pdf
 38756,true,2026-05-01,1125.00,CliRsvRept.pdf
 38762,true,2026-04-21,1600.00,CliRsvRept (1).pdf
 38763,true,2026-04-21,1600.00,CliRsvRept (1).pdf
 38764,true,2026-04-21,1600.00,CliRsvRept (1).pdf
 38766,true,2026-04-21,600.00,CliRsvRept (1).pdf
-38781,true,2026-04-14,575.00,CliRsvRept (1).pdf
-38782,true,2026-04-14,575.00,CliRsvRept (1).pdf
-38783,true,2026-04-22,575.00,CliRsvRept (1).pdf
-38784,true,2026-04-22,575.00,CliRsvRept (1).pdf
 38786,true,2026-04-21,900.00,CliRsvRept (1).pdf
 38787,true,2026-04-21,900.00,CliRsvRept (1).pdf
-38789,true,2026-04-07,6400.00,CliRsvRept (1).pdf
-38812,true,2026-04-13,600.00,CliRsvRept (1).pdf
-38813,true,2026-04-13,600.00,CliRsvRept (1).pdf
-38814,true,2026-04-13,600.00,CliRsvRept (1).pdf
-38817,true,2026-04-13,600.00,CliRsvRept (1).pdf
-38825,true,2026-04-07,1400.00,CliRsvRept (1).pdf
-38830,true,2026-05-04,3200.00,CliRsvRept.pdf
-38844,true,2026-04-07,875.00,CliRsvRept (1).pdf
-38845,true,2026-04-07,1400.00,CliRsvRept (1).pdf
 38846,true,2026-04-24,5700.00,CliRsvRept (1).pdf
 38847,true,2026-04-24,4200.00,CliRsvRept (1).pdf
-38851,true,2026-04-13,750.00,CliRsvRept (1).pdf
 38855,true,2026-04-21,925.00,CliRsvRept (1).pdf
 38861,true,2026-04-21,750.00,CliRsvRept (1).pdf
 38863,true,2026-05-01,750.00,CliRsvRept.pdf
 38869,true,2026-05-01,1650.00,CliRsvRept.pdf
 38870,true,2026-04-21,2650.00,CliRsvRept (1).pdf
 38872,true,2026-04-21,925.00,CliRsvRept (1).pdf
-38874,true,2026-04-07,875.00,CliRsvRept (1).pdf
 38875,true,2026-04-08,650.00,CliRsvRept (1).pdf
 38879,true,2026-04-08,650.00,CliRsvRept (1).pdf
-38903,true,2026-05-04,650.00,CliRsvRept.pdf
-38904,true,2026-05-04,650.00,CliRsvRept.pdf
-38905,true,2026-05-04,650.00,CliRsvRept.pdf
-38906,true,2026-05-04,650.00,CliRsvRept.pdf
-38909,true,2026-05-04,650.00,CliRsvRept.pdf
-38910,true,2026-05-04,650.00,CliRsvRept.pdf
-38911,true,2026-05-04,725.00,CliRsvRept.pdf
-38932,true,2026-04-07,600.00,CliRsvRept (1).pdf
-38950,true,2026-05-04,4600.00,CliRsvRept.pdf
-38953,true,2026-04-07,600.00,CliRsvRept (1).pdf
-38954,true,2026-04-07,600.00,CliRsvRept (1).pdf
-38955,true,2026-04-08,600.00,CliRsvRept (1).pdf
-38957,true,2026-04-23,650.00,CliRsvRept (1).pdf
-38962,true,2026-04-24,1800.00,CliRsvRept (1).pdf
-38963,true,2026-04-24,1800.00,CliRsvRept (1).pdf
-38965,true,2026-05-05,1800.00,CliRsvRept.pdf
 38975,true,2026-04-21,1125.00,CliRsvRept (1).pdf
 38976,true,2026-05-01,1125.00,CliRsvRept.pdf
-38987,true,2026-05-04,4400.00,CliRsvRept.pdf
-38988,true,2026-05-04,4400.00,CliRsvRept.pdf
-38989,true,2026-05-04,3700.00,CliRsvRept.pdf
 39002,true,2026-04-21,900.00,CliRsvRept (1).pdf
 39003,true,2026-04-21,900.00,CliRsvRept (1).pdf
-39017,true,2026-05-04,3762.50,CliRsvRept.pdf
-39028,true,2026-04-22,575.00,CliRsvRept (1).pdf
-39029,true,2026-04-22,575.00,CliRsvRept (1).pdf
-39042,true,2026-04-08,600.00,CliRsvRept (1).pdf
-39043,true,2026-04-08,600.00,CliRsvRept (1).pdf
-39044,true,2026-04-08,600.00,CliRsvRept (1).pdf
-39045,true,2026-04-07,700.00,CliRsvRept (1).pdf
-39049,true,2026-05-05,4200.00,CliRsvRept.pdf
 39050,true,2026-04-21,993.00,CliRsvRept (1).pdf
 39051,true,2026-04-21,993.00,CliRsvRept (1).pdf
 39070,true,2026-04-21,800.00,CliRsvRept (1).pdf
 39073,true,2026-04-21,700.00,CliRsvRept (1).pdf
 39074,true,2026-04-21,500.00,CliRsvRept (1).pdf
-39077,true,2026-04-22,1500.00,CliRsvRept (1).pdf
-39078,true,2026-04-24,1500.00,CliRsvRept (1).pdf
 39084,true,2026-04-21,1350.00,CliRsvRept (1).pdf
 39085,true,2026-04-21,1350.00,CliRsvRept (1).pdf
-39099,true,2026-05-04,3800.00,CliRsvRept.pdf
 39100,true,2026-04-21,1250.00,CliRsvRept (1).pdf
 39104,true,2026-05-01,1500.00,CliRsvRept.pdf
 39105,true,2026-05-01,1600.00,CliRsvRept.pdf
@@ -445,56 +79,19 @@ invoice_number,released,release_date,release_amount,source_pdf
 39142,true,2026-04-21,650.00,CliRsvRept (1).pdf
 39143,true,2026-04-21,650.00,CliRsvRept (1).pdf
 39145,true,2026-05-01,2650.00,CliRsvRept.pdf
-39151,true,2026-04-21,650.00,CliRsvRept (1).pdf
-39153,true,2026-05-04,725.00,CliRsvRept.pdf
-39166,true,2026-05-06,1400.00,CliRsvRept.pdf
-39167,true,2026-05-06,1400.00,CliRsvRept.pdf
-39168,true,2026-05-06,1400.00,CliRsvRept.pdf
-39172,true,2026-04-08,600.00,CliRsvRept (1).pdf
-39173,true,2026-05-06,1000.00,CliRsvRept.pdf
 39174,true,2026-04-21,1025.00,CliRsvRept (1).pdf
 39175,true,2026-05-01,925.00,CliRsvRept.pdf
-39181,true,2026-05-04,725.00,CliRsvRept.pdf
-39193,true,2026-04-07,600.00,CliRsvRept (1).pdf
-39194,true,2026-04-13,600.00,CliRsvRept (1).pdf
-39201,true,2026-05-06,650.00,CliRsvRept.pdf
-39203,true,2026-04-13,300.00,CliRsvRept (1).pdf
-39205,true,2026-05-05,700.00,CliRsvRept.pdf
-39206,true,2026-05-05,700.00,CliRsvRept.pdf
-39207,true,2026-05-05,700.00,CliRsvRept.pdf
-39209,true,2026-05-05,700.00,CliRsvRept.pdf
 39213,true,2026-04-21,900.00,CliRsvRept (1).pdf
 39214,true,2026-05-01,700.00,CliRsvRept.pdf
 39215,true,2026-05-01,1400.00,CliRsvRept.pdf
 39216,true,2026-05-01,1470.00,CliRsvRept.pdf
-39230,true,2026-04-13,350.00,CliRsvRept (1).pdf
-39233,true,2026-05-04,3725.00,CliRsvRept.pdf
-39234,true,2026-05-04,3800.00,CliRsvRept.pdf
-39235,true,2026-04-08,600.00,CliRsvRept (1).pdf
-39236,true,2026-04-07,600.00,CliRsvRept (1).pdf
-39237,true,2026-04-13,600.00,CliRsvRept (1).pdf
-39238,true,2026-04-07,600.00,CliRsvRept (1).pdf
 39244,true,2026-04-21,1250.00,CliRsvRept (1).pdf
 39246,true,2026-05-01,1100.00,CliRsvRept.pdf
-39268,true,2026-04-08,600.00,CliRsvRept (1).pdf
-39285,true,2026-04-08,600.00,CliRsvRept (1).pdf
 39294,true,2026-04-21,750.00,CliRsvRept (1).pdf
 39295,true,2026-04-21,750.00,CliRsvRept (1).pdf
-39310,true,2026-04-13,350.00,CliRsvRept (1).pdf
-39317,true,2026-04-13,300.00,CliRsvRept (1).pdf
-39318,true,2026-04-13,450.00,CliRsvRept (1).pdf
-39322,true,2026-04-13,450.00,CliRsvRept (1).pdf
 39333,true,2026-04-21,320.00,CliRsvRept (1).pdf
 39334,true,2026-04-21,320.00,CliRsvRept (1).pdf
-39335,true,2026-05-04,750.00,CliRsvRept.pdf
-39338,true,2026-05-04,750.00,CliRsvRept.pdf
-39339,true,2026-05-04,750.00,CliRsvRept.pdf
 39340,true,2026-05-01,1400.00,CliRsvRept.pdf
-39344,true,2026-05-04,750.00,CliRsvRept.pdf
-39348,true,2026-05-04,250.00,CliRsvRept.pdf
 39359,true,2026-04-21,950.00,CliRsvRept (1).pdf
-39368,true,2026-04-08,600.00,CliRsvRept (1).pdf
 39385,true,2026-05-01,450.00,CliRsvRept.pdf
-39387,true,2026-05-04,750.00,CliRsvRept.pdf
-39388,true,2026-05-04,750.00,CliRsvRept.pdf
 39408,true,2026-05-01,800.00,CliRsvRept.pdf
