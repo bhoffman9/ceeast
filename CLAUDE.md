@@ -130,11 +130,13 @@ loads.csv ──► loadReservesData() ──► <Reserves>
                                        • released === true  → <Released />
 ```
 
-The Excel is the **source of truth** — it's Ben's working book. Its `RELEASED RESERVES` / `RESERVES RELEASED` column is hand-keyed when payments come in. The dashboard treats a non-zero value in that column as "released."
+The Excel is the **load universe** — every CE East load lives in Ben's working book and `process.py` reads every sheet. But for release status, the Excel `RELEASED RESERVES` / `RESERVES RELEASED` column is **only trusted as a Triumph-era signal** (loads released under our previous factor, before Flexent). Ben's hand-keying of that column for current Flexent loads is no longer used — the PDFs are authoritative there.
 
-The Flexent reserve PDFs are a **cross-check + date source**. `process.py` parses every `Pmt` row and:
-- fills `release_date` on rows the Excel already marked released (Excel doesn't track dates)
-- flags rows as released if the PDF shows a `Pmt` but Excel hasn't been updated yet — these get `release_source=pdf` so the gap is visible
+The Flexent reserve PDFs are the **authoritative release source for the Flexent era**. `process.py` parses every `Pmt` row across all PDFs in both `incoming/` (new this week) and `docs/` (archived) and:
+- marks the load as released, source=`flexent`, with the PDF's release date
+- overrides any Excel keying on the same invoice (PDF wins)
+
+Loads with no PDF Pmt fall back to the Excel flag and get source=`triumph` — these are pre-Flexent releases done under our prior factor, which is why no Flexent PDF will ever cover them.
 
 ### loads.csv schema
 ```
@@ -144,7 +146,7 @@ released_reserves, fees, carrier, carrier_invoice, carrier_pay, source_sheet,
 released, release_date, release_amount, release_source
 ```
 - `released` is `"true"`/`"false"` (string in CSV, coerced to bool in `lib/data.js`)
-- `release_source`: `excel` (Excel column populated, no PDF cross-check) | `pdf` (PDF only — Excel lagging) | `both` | empty (unreleased)
+- `release_source`: `flexent` (Flexent PDF Pmt row exists — authoritative) | `triumph` (Excel `RELEASED RESERVES` populated, no Flexent PDF — pre-Flexent release under our previous factor) | empty (unreleased)
 - `customer` is the **normalized** name (e.g. "Rentex"); `customer_raw` preserves the original spelling for audit
 - `reserves` is the **5% calculated** reserve (`invoice_amount × 0.05`); `reserves_excel` is the raw Excel value (kept for audit)
 - `release_amount` for released loads = the 5% reserve = the amount Flexent gives back when the customer pays
@@ -172,20 +174,21 @@ Flexent holds **5% of every funded invoice** as reserve. When the customer pays,
    - Walks every sheet whose name contains `invoice list` or `inv`. Re-detects headers as it goes — sheets like MAR 2026 have **two distinct header sections** (rows 4 and 45 with different column orders) and the parser switches mapping mid-sheet.
    - Skips footer rows (`Totals`) and embedded sub-headers (`InvNo`, `Invoice`)
    - Dedupes by invoice_number — last sheet wins (so monthly sheets supersede the 2025 list)
-   - Parses every `Pmt` row out of the PDFs
-   - Cross-merges Excel ⨝ PDF on `invoice_number`
+   - Parses every `Pmt` row out of **every PDF in `incoming/` AND every PDF in `docs/`** — Flexent reports are cumulative for the current period only, so the archive must be re-read every run or PDF-only release flags would silently drop off when a newer report supersedes an older one
+   - Cross-merges Excel ⨝ PDF on `invoice_number` — PDF wins for the Flexent era; Excel flag is the fallback for Triumph-era loads
    - Writes `loads.csv` + `reserve_status.csv`
-   - Moves PDFs to `docs/`. Excel stays in `incoming/` (Ben keeps editing it)
+   - Moves `incoming/` PDFs to `docs/` (archived PDFs stay put). Excel stays in `incoming/` (Ben keeps editing it)
 3. Commit + push `loads.csv` + `reserve_status.csv` — Vercel redeploys
 
 The Excel itself is gitignored (payroll, contact info, expenses). PDFs are also gitignored. Only the derived CSV gets committed.
 
-### Initial run (2026-05-06)
-- 595 loads parsed and deduped
+### Run state (2026-05-11)
+- 614 loads parsed and deduped
 - 421 released ($895K gross / $44.8K reserve released @ 5%)
-- 174 unreleased ($403K gross / $20.2K reserve held @ 5%)
-- 79 invoices flagged released by PDFs but not yet keyed into Excel (`release_source=pdf`)
-- PDF coverage: Mar 13 → May 4, 2026
+  - **96** released by Flexent (`release_source=flexent`, PDF-backed)
+  - **325** released by Triumph (`release_source=triumph`, Excel-only — pre-Flexent)
+- 193 unreleased ($403K gross / $20.2K reserve held @ 5%)
+- PDF coverage: Mar 13 → May 4, 2026 (3 archived reports in `docs/`)
 
 ## Deploy
 
@@ -199,7 +202,7 @@ The Excel itself is gitignored (payroll, contact info, expenses). PDFs are also 
 - **Reserves tab data is a snapshot.** It only changes when someone runs `process.py` and pushes the resulting CSVs.
 - **Excel is gitignored.** Don't `git add` the .xlsx. Only the derived CSV is committed.
 - **CSV money columns are coerced to numbers** in `src/lib/data.js`. New numeric columns must be added to `NUM_COLS`.
-- **Unreleased = `released === false` in `loads.csv`**. The Excel column is the primary signal; PDF Pmt rows fill the gap when Excel is lagging.
+- **Unreleased = `released === false` in `loads.csv`**. PDF Pmt rows are the authoritative signal for the Flexent era; Excel `RELEASED RESERVES` keying is only trusted for pre-Flexent (Triumph-era) loads where no PDF exists.
 - **Default Reserves sub-tab is Unreleased** — that's the live exposure. Don't change without a reason.
 - **Loan principals are hardcoded.** Ben confirmed Anthony repaid in full 2026-05-07. Update `SHAREHOLDER` constant in `OwnerPayback.jsx` if a new contribution happens.
 - **Income tab depends on the CFO dashboard staying live.** Loose coupling per Ben's decision (Path B).

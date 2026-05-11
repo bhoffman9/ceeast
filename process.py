@@ -173,12 +173,15 @@ def _row_to_load(row, mapping, sheet):
         "carrier_invoice": str(g("carrier invoice") or "").strip(),
         "carrier_pay": _to_num(g("carrier invoice amount", "carrier pay")),
         "source_sheet": sheet,
-        # release fields filled below from PDF cross-check
+        # release fields filled below from PDF cross-check.
+        # Excel `RELEASED RESERVES` keying is treated as a Triumph-era signal only
+        # (loads released under our prior factor, before Flexent). It's overridden
+        # below whenever a Flexent PDF Pmt exists for the invoice.
         "released": "true" if is_released else "false",
         "release_date": "",
         # If released, the amount released equals the reserve held (5% of invoice)
         "release_amount": reserve_held if is_released else "",
-        "release_source": "excel" if is_released else "",
+        "release_source": "triumph" if is_released else "",
     }
 
 
@@ -291,22 +294,23 @@ def main() -> int:
     for pdf in new_pdfs:
         _ingest(pdf, archive_after=True)
 
-    # 3) Cross-merge: PDF date overrides Excel-only release; PDF Pmt without Excel flag also released
-    pdf_only_count = 0
+    # 3) Cross-merge: any load with a Flexent PDF Pmt is released-by-flexent (PDF is
+    # authoritative for the Flexent era — Ben's Excel keying is incidental). Loads
+    # without a PDF Pmt fall back to the Triumph-era Excel flag set in step 1.
+    flexent_count = 0
+    triumph_count = 0
     for load in loads:
         inv = load["invoice_number"]
         rel = pdf_releases.get(inv)
         if rel:
-            if load["released"] == "false":
-                pdf_only_count += 1
-                load["released"] = "true"
-                load["release_amount"] = load["reserves"] or ""
-                load["release_source"] = "pdf"
-            else:
-                load["release_source"] = "both"
+            load["released"] = "true"
+            load["release_amount"] = load["reserves"] or ""
+            load["release_source"] = "flexent"
             load["release_date"] = rel["release_date"]
-    if pdf_only_count:
-        print(f"  note:  {pdf_only_count} loads released in PDF but NOT yet in Excel — flagged released")
+            flexent_count += 1
+        elif load["release_source"] == "triumph":
+            triumph_count += 1
+    print(f"  note:  {flexent_count} released by Flexent (PDF), {triumph_count} released by Triumph (pre-Flexent, Excel only)")
 
     # 4) Write loads.csv
     fieldnames = [
