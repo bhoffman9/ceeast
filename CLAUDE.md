@@ -1,8 +1,9 @@
 # CE East Dashboard — CLAUDE.md
 
-Capacity Express East LLC — owner-facing dashboard. Two tabs:
+Capacity Express East LLC — owner-facing dashboard. Three tabs:
 - **Income** (default) — live QBO P&L + Balance Sheet, distribution estimator, shareholder payback tracker
-- **Reserves** — load-by-load reserve tracking against the live load book + Flexent PDFs
+- **Reserves** — load-by-load reserve tracking against the live load book + Flexent PDFs, with per-invoice transfer queue
+- **Commissions** — partner commission tracker (currently Kris on On Services loads)
 
 ## Live URL
 
@@ -52,11 +53,13 @@ ce-east/
 ├── incoming/                     # Drop the Excel load book + new reserve PDFs here.
 │                                 #   Excel stays (live, kept updating). PDFs move to docs/ after processing.
 │                                 #   .xlsx + .pdf are gitignored — only derived CSV is committed.
-├── docs/                         # Archived reserve PDFs after process.py runs (also gitignored)
+├── docs/                         # Archived reserve PDFs (re-read by process.py every run; gitignored)
 ├── public/
 │   └── data/
 │       ├── loads.csv             # Output: every CE East load + release status (dashboard reads this)
-│       └── reserve_status.csv    # Output: PDF-parsed release events (audit / cross-check)
+│       ├── reserve_status.csv    # Output: PDF-parsed release events (audit; CE East only)
+│       ├── reserve_transfers.csv # Manually maintained: invoices where the cash was moved out of CE East
+│       └── kris_payments.csv     # Manually maintained: per-leg payments made to Kris (Commissions tab)
 └── src/
     ├── main.jsx
     ├── App.jsx                   # Shell + top-level tab navigation
@@ -64,14 +67,15 @@ ce-east/
     ├── styles.js                 # All CSS (dark theme + tabs + tables)
     ├── lib/
     │   ├── format.js             # fd, fn, fp, fdate
-    │   ├── data.js               # loads.csv fetch + numeric coercion (Reserves tab)
+    │   ├── data.js               # CSV fetchers + numeric coercion (loadReservesData, loadKrisPayments, loadReserveTransfers)
     │   └── qbo.js                # CFO-dashboard QBO endpoint client (Income tab)
     └── views/
         ├── OwnerPayback.jsx      # Tab 1 (labeled "Income") — live QBO P&L + BS + payback estimator
+        ├── Commissions.jsx       # Tab 3 — Kris on On Services (25% funded + 25% released reserves; per-leg checkmarks)
         └── Reserves/
             ├── index.jsx         # Tab 2 shell — sub-tabs Unreleased (default) | Released
             ├── Unreleased.jsx    # Live exposure: KPI tiles + searchable/sortable load detail
-            └── Released.jsx      # Customer roll-up subtotal + collapsible per-load detail
+            └── Released.jsx      # Reserves-to-Transfer panel + all-time customer roll-up + per-load detail
 ```
 
 The component file is still named `OwnerPayback.jsx` for git history; the displayed tab label is "Income."
@@ -80,8 +84,25 @@ The component file is still named `OwnerPayback.jsx` for git history; the displa
 
 Top-level tabs in [src/App.jsx](src/App.jsx):
 1. **Income** (default) — live QBO P&L + BS, distribution estimator, shareholder payback tracker
-2. **Reserves** — sub-tabs: **Unreleased** (default — live exposure) and **Released** (this-week transfer panel + all-time customer rollup)
+2. **Reserves** — sub-tabs: **Unreleased** (default — live exposure) and **Released** (Reserves-to-Transfer queue + all-time customer rollup)
 3. **Commissions** — Partner commission tracker. Currently scoped to Kris on On Services loads (25% of `funded` per load + 25% of released reserves for `customer = "On Services"`). Add more partners/customers by extending [src/views/Commissions.jsx](src/views/Commissions.jsx).
+
+## Weekly Monday workflow
+
+Ben drops `CliRsvRept*.pdf` (the latest Flexent reserve report) and the updated Excel into [incoming/](incoming/). Assistant runs the full drill end-to-end:
+
+1. `python process.py` — refreshes [public/data/loads.csv](public/data/loads.csv) and [reserve_status.csv](public/data/reserve_status.csv). Reads PDFs from both `incoming/` and `docs/` so PDF-only release flags persist; filters reserve_status to CE East invoices to drop CE Brokerage noise.
+2. **Reserves to Transfer** — diff PDF-released loads against [reserve_transfers.csv](public/data/reserve_transfers.csv). Report new cash sitting in CE East that needs to be moved out.
+3. **New On Services loads** — flag any On Services invoices new to the Excel since last week, with funded amount + projected Kris commission.
+4. **Newly released On Services reserves** — list reserve commission newly owed to Kris (25% × actual release amount; use `released_reserves` for Triumph-era).
+5. **Sanity audit** — cross-check `reserve_status.csv` PDF events vs dashboard release status; confirm no On Services release got dropped.
+6. **Commissions cycle check** — flag any On Services load whose funded leg has been unpaid for >2 weeks.
+
+Then ask Ben:
+- Did you transfer the cash? → append to [reserve_transfers.csv](public/data/reserve_transfers.csv)
+- Did you pay Kris? → append per-leg rows to [kris_payments.csv](public/data/kris_payments.csv)
+
+Commit + push to `main` → Vercel redeploys.
 
 The Reserves sub-tab default is `unreleased` because that's the live exposure — Released is a historical roll-up.
 
@@ -229,21 +250,7 @@ The Excel itself is gitignored (payroll, contact info, expenses). PDFs are also 
 - **CSV money columns are coerced to numbers** in `src/lib/data.js`. New numeric columns must be added to `NUM_COLS`.
 - **Unreleased = `released === false` in `loads.csv`**. PDF Pmt rows are the authoritative signal for the Flexent era; Excel `RELEASED RESERVES` keying is only trusted for pre-Flexent (Triumph-era) loads where no PDF exists.
 - **Default Reserves sub-tab is Unreleased** — that's the live exposure. Don't change without a reason.
-- **"Reserves to Transfer"** is the gold-bordered panel at the top of the Released sub-tab. It shows every Flexent-PDF-released load whose `invoice_number` is NOT yet in [public/data/reserve_transfers.csv](public/data/reserve_transfers.csv). When Ben has pulled cash out of CE East for those releases, append rows to that CSV (one per invoice). When the panel is empty, it flips to a green "All caught up" state.
-
-### reserve_transfers.csv schema
-```
-transfer_date, invoice_number, amount, notes
-```
-The dashboard's "Pending" filter is just `released && release_date && !transferred`. The `transfer_date` column doesn't drive any filtering — it's history/audit only. The "Last transfer batch" KPI groups by `transfer_date` and shows the most recent one.
-
-### Weekly Reserves workflow (every Monday)
-1. Drop the latest Flexent `CliRsvRept*.pdf` into [incoming/](incoming/)
-2. Run `python process.py` (re-reads incoming/ + all archived PDFs in docs/ and updates [public/data/loads.csv](public/data/loads.csv))
-3. Open the dashboard → Reserves → Released. The "Reserves to Transfer" panel lists every new release Flexent has paid out since the last batch.
-4. Transfer the cash out of CE East to wherever it needs to go.
-5. Append the transferred invoice numbers to [public/data/reserve_transfers.csv](public/data/reserve_transfers.csv) using today's date.
-6. Commit + push — Vercel redeploys, panel returns to "All caught up".
+- **"Reserves to Transfer"** is the gold-bordered panel at the top of the Released sub-tab. It shows every Flexent-PDF-released load whose `invoice_number` is NOT yet in [public/data/reserve_transfers.csv](public/data/reserve_transfers.csv). When empty, it flips to a green "All caught up" state. Schema: `transfer_date, invoice_number, amount, notes`. The `transfer_date` column is history/audit only — the pending filter is just `released && release_date && !transferred`.
 - **Loan principals are hardcoded.** Ben confirmed Anthony repaid in full 2026-05-07. Update `SHAREHOLDER` constant in `OwnerPayback.jsx` if a new contribution happens.
 - **Income tab depends on the CFO dashboard staying live.** Loose coupling per Ben's decision (Path B).
 
@@ -253,7 +260,7 @@ The dashboard's "Pending" filter is just `released && release_date && !transferr
 |---|---|---|
 | CFO dashboard (`cfo-dashboard-eta.vercel.app`) | Hosts `/api/qbo-pnl` and `/api/qbo-bs` for `company=ce_east` | Income tab fails to load (Reserves still works) |
 | QBO OAuth tokens (Supabase `qbo_tokens` row for `ce_east`) | P&L + BS data source | Income tab returns 401 → reconnect via CFO dashboard's Connect button |
-| Flexent reserve report PDFs | `release_date` cross-check on Reserves tab | Stale dates / unreconciled `release_source=pdf` lag stays larger |
+| Flexent reserve report PDFs | Authoritative release source for Flexent-era loads + powers the Reserves-to-Transfer queue | Missing weekly PDF → new releases don't surface, transfer queue goes stale |
 
 ## Open Items / TODO
 
@@ -261,6 +268,8 @@ The dashboard's "Pending" filter is just `released && release_date && !transferr
 - CSV export button on the Unreleased tab
 - Optional: pull Chris's contribution principal from QBO journal entries (currently hardcoded — QBO equity shows current balance, not original deposit)
 - Optional: "Data refreshed: YYYY-MM-DD" timestamp on the Reserves tab so viewers know how stale the snapshot is
+- Verify composition of 2/25/26 $613.25 Kris payment (Ben confirmed 2026-05-11; seed comment in kris_payments.csv documents it)
+- Resolve whether 7-digit `2000xxx`/`2001xxx` invoices in the CE East Excel are actually CE East or were mis-keyed from CE Brokerage — currently they show up under the Commissions tab via `customer = "On Services"` matching
 
 ## Related Projects
 
