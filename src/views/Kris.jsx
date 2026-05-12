@@ -23,6 +23,17 @@ export default function Kris() {
     [loads],
   );
 
+  // Build an index of paid (invoice, leg) -> { date, amount } so per-load checkmarks
+  // can resolve quickly. Each row in kris_payments.csv is one leg of one invoice.
+  const paidIndex = useMemo(() => {
+    const m = new Map();
+    for (const p of payments) {
+      const key = `${p.invoice_number}|${p.leg}`;
+      m.set(key, { date: p.payment_date, amount: Number(p.amount || 0), notes: p.notes });
+    }
+    return m;
+  }, [payments]);
+
   const lines = useMemo(() => {
     return onServices.map((l) => {
       // Negative funded counts — when a load loses money Kris's commission goes
@@ -39,6 +50,8 @@ export default function Kris() {
       const projectedReserve = Number(l.reserves || 0);
       const reserveComm = l.released ? actualReserve * KRIS_RATE : 0;
       const reserveCommPotential = projectedReserve * KRIS_RATE;
+      const fundedPaid = paidIndex.get(`${l.invoice_number}|funded`) || null;
+      const reservePaid = paidIndex.get(`${l.invoice_number}|reserve`) || null;
       return {
         ...l,
         actualReserve,
@@ -47,9 +60,11 @@ export default function Kris() {
         reserveComm,
         reserveCommPotential,
         totalDue: fundedComm + reserveComm,
+        fundedPaid,
+        reservePaid,
       };
     }).sort((a, b) => String(b.invoice_date || "").localeCompare(String(a.invoice_date || "")));
-  }, [onServices]);
+  }, [onServices, paidIndex]);
 
   const totals = useMemo(() => {
     const totalFunded = lines.reduce((s, l) => s + l.fundedComm, 0);
@@ -59,8 +74,16 @@ export default function Kris() {
       0,
     );
     const totalEarned = totalFunded + totalReserveEarned;
-    const totalPaid = payments.reduce((s, p) => s + (p.payment_amount || 0), 0);
+    const totalPaid = payments.reduce((s, p) => s + Number(p.amount || 0), 0);
     const outstanding = totalEarned - totalPaid;
+
+    const outstandingFunded = lines
+      .filter((l) => !l.fundedPaid)
+      .reduce((s, l) => s + l.fundedComm, 0);
+    const outstandingReserve = lines
+      .filter((l) => l.released && !l.reservePaid)
+      .reduce((s, l) => s + l.reserveComm, 0);
+
     return {
       loads: lines.length,
       released: lines.filter((l) => l.released).length,
@@ -70,8 +93,28 @@ export default function Kris() {
       totalEarned,
       totalPaid,
       outstanding,
+      outstandingFunded,
+      outstandingReserve,
+      fundedLegsPaid: lines.filter((l) => l.fundedPaid).length,
+      reserveLegsPaid: lines.filter((l) => l.reservePaid).length,
     };
   }, [lines, payments]);
+
+  // Group per-leg payments back into payment-date batches for the history view.
+  const paymentHistory = useMemo(() => {
+    const m = new Map();
+    for (const p of payments) {
+      const key = p.payment_date || "—";
+      const cur = m.get(key) || { date: key, count: 0, total: 0, notes: new Set() };
+      cur.count += 1;
+      cur.total += Number(p.amount || 0);
+      if (p.notes) cur.notes.add(p.notes);
+      m.set(key, cur);
+    }
+    return [...m.values()]
+      .map((b) => ({ ...b, notes: [...b.notes].join("; ") }))
+      .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  }, [payments]);
 
   const visibleLines = showAll ? lines : lines.slice(0, 30);
 
@@ -98,10 +141,10 @@ export default function Kris() {
       </div>
 
       <div className="g4" style={{ marginBottom: 14 }}>
-        <Kpi label="Funded Commission (earned)" value={fd(totals.totalFunded, 2)} color="#3ddc84" />
-        <Kpi label="Reserve Commission (released)" value={fd(totals.totalReserveEarned, 2)} color="#3ddc84" />
-        <Kpi label="Reserve Commission (pending release)" value={fd(totals.totalReservePending, 2)} color="#f5c542" />
-        <Kpi label="" value="" color="transparent" />
+        <Kpi label={`Funded Comm Outstanding (${totals.loads - totals.fundedLegsPaid} loads)`} value={fd(totals.outstandingFunded, 2)} color="#f5c542" />
+        <Kpi label={`Reserve Comm Outstanding (${totals.released - totals.reserveLegsPaid} loads)`} value={fd(totals.outstandingReserve, 2)} color="#f5c542" />
+        <Kpi label="Reserve Comm Pending Release" value={fd(totals.totalReservePending, 2)} color="var(--mu)" />
+        <Kpi label="Funded Comm Earned (all-time)" value={fd(totals.totalFunded, 2)} color="#3ddc84" />
       </div>
 
       <div className="card" style={{ marginBottom: 14 }}>
@@ -110,25 +153,25 @@ export default function Kris() {
           <thead>
             <tr>
               <th>Date</th>
+              <th>Legs</th>
               <th>Amount</th>
               <th>Notes</th>
             </tr>
           </thead>
           <tbody>
-            {payments
-              .slice()
-              .sort((a, b) => String(b.payment_date).localeCompare(String(a.payment_date)))
-              .map((p, i) => (
-                <tr key={i}>
-                  <td>{fdate(p.payment_date)}</td>
-                  <td>{fd(p.payment_amount, 2)}</td>
-                  <td style={{ fontSize: 11, color: "var(--mu)" }}>{p.notes || "—"}</td>
-                </tr>
-              ))}
+            {paymentHistory.map((b, i) => (
+              <tr key={i}>
+                <td>{fdate(b.date)}</td>
+                <td>{b.count}</td>
+                <td>{fd(b.total, 2)}</td>
+                <td style={{ fontSize: 11, color: "var(--mu)" }}>{b.notes || "—"}</td>
+              </tr>
+            ))}
           </tbody>
           <tfoot>
             <tr>
               <td>Total</td>
+              <td>{payments.length}</td>
               <td>{fd(totals.totalPaid, 2)}</td>
               <td></td>
             </tr>
@@ -154,9 +197,11 @@ export default function Kris() {
                 <th>Amount</th>
                 <th>Funded</th>
                 <th>Kris (Funded)</th>
+                <th title="Funded leg paid">F✓</th>
                 <th>Released</th>
                 <th>Reserve</th>
                 <th>Kris (Reserve)</th>
+                <th title="Reserve leg paid">R✓</th>
                 <th>Total Kris</th>
               </tr>
             </thead>
@@ -170,12 +215,20 @@ export default function Kris() {
                     <td>{fd(l.invoice_amount, 0)}</td>
                     <td style={{ color: l.funded < 0 ? "#ff5252" : undefined }}>{fd(l.funded, 2)}</td>
                     <td style={{ color: negFunded ? "#ff5252" : "#3ddc84" }}>{fd(l.fundedComm, 2)}</td>
+                    <td title={l.fundedPaid ? `Paid ${l.fundedPaid.date} — ${fd(l.fundedPaid.amount, 2)}` : "Unpaid"}
+                        style={{ textAlign: "center", color: l.fundedPaid ? "#3ddc84" : "var(--mu)", fontSize: 14 }}>
+                      {l.fundedPaid ? "✓" : "—"}
+                    </td>
                     <td style={{ fontSize: 11, color: l.released ? "#3ddc84" : "var(--mu)" }}>
                       {l.released ? (l.release_date ? fdate(l.release_date) : "yes") : "no"}
                     </td>
                     <td>{fd(l.released ? l.actualReserve : l.projectedReserve, 2)}</td>
                     <td style={{ color: l.released ? "#3ddc84" : "#f5c542" }}>
                       {fd(l.released ? l.reserveComm : l.reserveCommPotential, 2)}
+                    </td>
+                    <td title={l.reservePaid ? `Paid ${l.reservePaid.date} — ${fd(l.reservePaid.amount, 2)}` : (l.released ? "Released, unpaid" : "Pending release")}
+                        style={{ textAlign: "center", color: l.reservePaid ? "#3ddc84" : "var(--mu)", fontSize: 14 }}>
+                      {l.reservePaid ? "✓" : "—"}
                     </td>
                     <td style={{ fontWeight: 600 }}>{fd(l.totalDue + (l.released ? 0 : l.reserveCommPotential), 2)}</td>
                   </tr>
