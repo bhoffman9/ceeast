@@ -229,7 +229,21 @@ The Excel itself is gitignored (payroll, contact info, expenses). PDFs are also 
 - **CSV money columns are coerced to numbers** in `src/lib/data.js`. New numeric columns must be added to `NUM_COLS`.
 - **Unreleased = `released === false` in `loads.csv`**. PDF Pmt rows are the authoritative signal for the Flexent era; Excel `RELEASED RESERVES` keying is only trusted for pre-Flexent (Triumph-era) loads where no PDF exists.
 - **Default Reserves sub-tab is Unreleased** — that's the live exposure. Don't change without a reason.
-- **"Reserves to Transfer — This Week"** is the gold-bordered panel at the top of the Released sub-tab. It's a 7-day rolling window anchored on the most recent `release_date` in the data (NOT today's date — the panel stays useful even if the pipeline hasn't been re-run this week). Window length is `TRANSFER_WINDOW_DAYS` in [src/views/Reserves/Released.jsx](src/views/Reserves/Released.jsx).
+- **"Reserves to Transfer"** is the gold-bordered panel at the top of the Released sub-tab. It shows every Flexent-PDF-released load whose `invoice_number` is NOT yet in [public/data/reserve_transfers.csv](public/data/reserve_transfers.csv). When Ben has pulled cash out of CE East for those releases, append rows to that CSV (one per invoice). When the panel is empty, it flips to a green "All caught up" state.
+
+### reserve_transfers.csv schema
+```
+transfer_date, invoice_number, amount, notes
+```
+The dashboard's "Pending" filter is just `released && release_date && !transferred`. The `transfer_date` column doesn't drive any filtering — it's history/audit only. The "Last transfer batch" KPI groups by `transfer_date` and shows the most recent one.
+
+### Weekly Reserves workflow (every Monday)
+1. Drop the latest Flexent `CliRsvRept*.pdf` into [incoming/](incoming/)
+2. Run `python process.py` (re-reads incoming/ + all archived PDFs in docs/ and updates [public/data/loads.csv](public/data/loads.csv))
+3. Open the dashboard → Reserves → Released. The "Reserves to Transfer" panel lists every new release Flexent has paid out since the last batch.
+4. Transfer the cash out of CE East to wherever it needs to go.
+5. Append the transferred invoice numbers to [public/data/reserve_transfers.csv](public/data/reserve_transfers.csv) using today's date.
+6. Commit + push — Vercel redeploys, panel returns to "All caught up".
 - **Loan principals are hardcoded.** Ben confirmed Anthony repaid in full 2026-05-07. Update `SHAREHOLDER` constant in `OwnerPayback.jsx` if a new contribution happens.
 - **Income tab depends on the CFO dashboard staying live.** Loose coupling per Ben's decision (Path B).
 

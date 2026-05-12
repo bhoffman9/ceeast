@@ -51,3 +51,11 @@ export const loadKrisPayments = async () => {
     payment_amount: Number(String(r.payment_amount || "0").replace(/[$,]/g, "")) || 0,
   }));
 };
+
+export const loadReserveTransfers = async () => {
+  const rows = await fetchCsv("/data/reserve_transfers.csv");
+  return rows.map((r) => ({
+    ...r,
+    amount: Number(String(r.amount || "0").replace(/[$,]/g, "")) || 0,
+  }));
+};

@@ -1,14 +1,9 @@
 import { useMemo, useState } from "react";
 import { fd, fdate } from "../../lib/format";
 
-// 7-day rolling window anchored on the most recent release_date in the data.
-// Each weekly process.py run advances the anchor, so this view always shows
-// "the latest batch of Flexent payouts that need to be transferred."
-const TRANSFER_WINDOW_DAYS = 7;
-
-export default function Released({ rows }) {
+export default function Released({ rows, transfers = [] }) {
   const [expanded, setExpanded] = useState(false);
-  const [weekExpanded, setWeekExpanded] = useState(true);
+  const [pendingExpanded, setPendingExpanded] = useState(true);
 
   const totals = useMemo(() => ({
     count: rows.length,
@@ -17,26 +12,30 @@ export default function Released({ rows }) {
     released: rows.reduce((s, r) => s + (r.release_amount || r.released_reserves || r.reserves || 0), 0),
   }), [rows]);
 
-  // "This week" = trailing TRANSFER_WINDOW_DAYS from the latest release_date seen.
-  // Anchoring on the data (not today) means the panel stays useful even if the
-  // pipeline hasn't been re-run yet this week.
-  const thisWeek = useMemo(() => {
-    const dated = rows.filter((r) => r.release_date);
-    if (!dated.length) return { rows: [], start: null, end: null, total: 0, count: 0 };
-    const sorted = [...dated].sort((a, b) => String(b.release_date).localeCompare(String(a.release_date)));
-    const end = sorted[0].release_date;
-    const endDate = new Date(end);
-    const startDate = new Date(endDate);
-    startDate.setDate(startDate.getDate() - (TRANSFER_WINDOW_DAYS - 1));
-    const startIso = startDate.toISOString().slice(0, 10);
-    const windowRows = dated.filter((r) => r.release_date >= startIso && r.release_date <= end);
-    const total = windowRows.reduce((s, r) => s + (r.release_amount || r.released_reserves || r.reserves || 0), 0);
-    return { rows: windowRows, start: startIso, end, total, count: windowRows.length };
-  }, [rows]);
+  // A released load is "pending transfer" until a row exists for it in
+  // reserve_transfers.csv. Each Monday's pipeline pulls in new Flexent payouts;
+  // the user marks them transferred by appending to that file.
+  const transferredInvs = useMemo(
+    () => new Set(transfers.map((t) => String(t.invoice_number).trim())),
+    [transfers],
+  );
 
-  const thisWeekByCustomer = useMemo(() => {
+  const pending = useMemo(() => {
+    const dated = rows.filter((r) => r.release_date && !transferredInvs.has(String(r.invoice_number).trim()));
+    const sorted = [...dated].sort((a, b) => String(b.release_date).localeCompare(String(a.release_date)));
+    const total = sorted.reduce((s, r) => s + (r.release_amount || r.released_reserves || r.reserves || 0), 0);
+    return {
+      rows: sorted,
+      count: sorted.length,
+      total,
+      start: sorted.length ? sorted[sorted.length - 1].release_date : null,
+      end: sorted.length ? sorted[0].release_date : null,
+    };
+  }, [rows, transferredInvs]);
+
+  const pendingByCustomer = useMemo(() => {
     const map = new Map();
-    for (const r of thisWeek.rows) {
+    for (const r of pending.rows) {
       const k = r.customer || "—";
       const cur = map.get(k) || { customer: k, count: 0, released: 0 };
       cur.count += 1;
@@ -44,12 +43,20 @@ export default function Released({ rows }) {
       map.set(k, cur);
     }
     return [...map.values()].sort((a, b) => b.released - a.released);
-  }, [thisWeek.rows]);
+  }, [pending.rows]);
 
-  const thisWeekDetail = useMemo(
-    () => [...thisWeek.rows].sort((a, b) => String(b.release_date || "").localeCompare(String(a.release_date || ""))),
-    [thisWeek.rows],
-  );
+  // Most recent batch of completed transfers, grouped by transfer_date.
+  const lastTransferBatch = useMemo(() => {
+    if (!transfers.length) return null;
+    const sorted = [...transfers].sort((a, b) => String(b.transfer_date).localeCompare(String(a.transfer_date)));
+    const latestDate = sorted[0].transfer_date;
+    const batch = sorted.filter((t) => t.transfer_date === latestDate);
+    return {
+      date: latestDate,
+      count: batch.length,
+      total: batch.reduce((s, t) => s + (t.amount || 0), 0),
+    };
+  }, [transfers]);
 
   const byCustomer = useMemo(() => {
     const map = new Map();
@@ -70,7 +77,7 @@ export default function Released({ rows }) {
 
   return (
     <div>
-      {thisWeek.count > 0 && (
+      {pending.count > 0 ? (
         <div
           className="card"
           style={{
@@ -81,24 +88,28 @@ export default function Released({ rows }) {
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
             <div>
-              <div className="ctit" style={{ marginBottom: 2, color: "#f5c542" }}>Reserves to Transfer — This Week</div>
+              <div className="ctit" style={{ marginBottom: 2, color: "#f5c542" }}>Reserves to Transfer</div>
               <div style={{ fontSize: 11, color: "var(--mu)" }}>
-                Flexent payouts {fdate(thisWeek.start)} → {fdate(thisWeek.end)}
+                Released by Flexent {fdate(pending.start)} → {fdate(pending.end)} — not yet transferred out of CE East
               </div>
             </div>
-            <button className="input" style={{ cursor: "pointer" }} onClick={() => setWeekExpanded((e) => !e)}>
-              {weekExpanded ? "Hide detail" : "Show detail"}
+            <button className="input" style={{ cursor: "pointer" }} onClick={() => setPendingExpanded((e) => !e)}>
+              {pendingExpanded ? "Hide detail" : "Show detail"}
             </button>
           </div>
 
-          <div className="g4" style={{ marginBottom: weekExpanded ? 14 : 0 }}>
-            <Kpi label="Loads Released" value={thisWeek.count} color="#f5c542" />
-            <Kpi label="Amount to Transfer" value={fd(thisWeek.total, 0)} color="#f5c542" big />
-            <Kpi label="Customers Paid" value={thisWeekByCustomer.length} color="#f5c542" />
-            <Kpi label="Window" value={`${TRANSFER_WINDOW_DAYS}d`} color="#f5c542" />
+          <div className="g4" style={{ marginBottom: pendingExpanded ? 14 : 0 }}>
+            <Kpi label="Loads Pending" value={pending.count} color="#f5c542" />
+            <Kpi label="Amount to Transfer" value={fd(pending.total, 0)} color="#f5c542" big />
+            <Kpi label="Customers" value={pendingByCustomer.length} color="#f5c542" />
+            <Kpi
+              label="Last transfer batch"
+              value={lastTransferBatch ? `${fdate(lastTransferBatch.date)} • ${fd(lastTransferBatch.total, 0)}` : "—"}
+              color="var(--mu)"
+            />
           </div>
 
-          {weekExpanded && (
+          {pendingExpanded && (
             <>
               <table className="tbl" style={{ marginBottom: 12 }}>
                 <thead>
@@ -109,7 +120,7 @@ export default function Released({ rows }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {thisWeekByCustomer.map((c) => (
+                  {pendingByCustomer.map((c) => (
                     <tr key={c.customer}>
                       <td>{c.customer}</td>
                       <td>{c.count}</td>
@@ -120,8 +131,8 @@ export default function Released({ rows }) {
                 <tfoot>
                   <tr>
                     <td>Total</td>
-                    <td>{thisWeek.count}</td>
-                    <td>{fd(thisWeek.total, 0)}</td>
+                    <td>{pending.count}</td>
+                    <td>{fd(pending.total, 0)}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -137,7 +148,7 @@ export default function Released({ rows }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {thisWeekDetail.map((r, i) => (
+                    {pending.rows.map((r, i) => (
                       <tr key={r.invoice_number || i}>
                         <td>{r.release_date ? fdate(r.release_date) : "—"}</td>
                         <td>{r.invoice_number}</td>
@@ -151,6 +162,23 @@ export default function Released({ rows }) {
               </div>
             </>
           )}
+        </div>
+      ) : (
+        <div
+          className="card"
+          style={{
+            marginBottom: 14,
+            border: "1px solid #3ddc84",
+            background: "linear-gradient(180deg, rgba(61,220,132,0.08) 0%, rgba(61,220,132,0.02) 100%)",
+          }}
+        >
+          <div className="ctit" style={{ marginBottom: 2, color: "#3ddc84" }}>Reserves to Transfer — All caught up ✓</div>
+          <div style={{ fontSize: 12, color: "var(--mu)" }}>
+            Every released reserve has been transferred out of CE East.
+            {lastTransferBatch && (
+              <> Last batch: {fdate(lastTransferBatch.date)}, {lastTransferBatch.count} loads, {fd(lastTransferBatch.total, 2)}.</>
+            )}
+          </div>
         </div>
       )}
 

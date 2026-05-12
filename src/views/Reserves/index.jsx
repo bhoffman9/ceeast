@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-import { loadReservesData } from "../../lib/data";
+import { loadReservesData, loadReserveTransfers } from "../../lib/data";
 import Unreleased from "./Unreleased";
 import Released from "./Released";
 
 export default function Reserves() {
   const [sub, setSub] = useState("unreleased");
   const [loads, setLoads] = useState([]);
+  const [transfers, setTransfers] = useState([]);
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadReservesData()
-      .then(setLoads)
+    Promise.all([loadReservesData(), loadReserveTransfers()])
+      .then(([l, t]) => { setLoads(l); setTransfers(t); })
       .catch((e) => setErr(e.message))
       .finally(() => setLoading(false));
   }, []);
@@ -43,7 +44,7 @@ export default function Reserves() {
         </div>
       )}
       {!loading && !err && loads.length > 0 && (
-        sub === "unreleased" ? <Unreleased rows={unreleased} /> : <Released rows={released} />
+        sub === "unreleased" ? <Unreleased rows={unreleased} /> : <Released rows={released} transfers={transfers} />
       )}
     </div>
   );
