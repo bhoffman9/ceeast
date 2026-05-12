@@ -3,12 +3,12 @@ import { CSS } from "./styles";
 import PasswordGate from "./PasswordGate";
 import OwnerPayback from "./views/OwnerPayback";
 import Reserves from "./views/Reserves";
-import Kris from "./views/Kris";
+import Commissions from "./views/Commissions";
 
 const TABS = [
   { id: "owner", label: "Income", el: OwnerPayback },
   { id: "reserves", label: "Reserves", el: Reserves },
-  { id: "kris", label: "Kris", el: Kris },
+  { id: "commissions", label: "Commissions", el: Commissions },
 ];
 
 export default function App() {

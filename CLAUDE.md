@@ -81,7 +81,7 @@ The component file is still named `OwnerPayback.jsx` for git history; the displa
 Top-level tabs in [src/App.jsx](src/App.jsx):
 1. **Income** (default) — live QBO P&L + BS, distribution estimator, shareholder payback tracker
 2. **Reserves** — sub-tabs: **Unreleased** (default — live exposure) and **Released** (this-week transfer panel + all-time customer rollup)
-3. **Kris** — On Services partner commission tracker. Kris gets 25% of `funded` per load + 25% of released reserves for `customer = "On Services"` loads.
+3. **Commissions** — Partner commission tracker. Currently scoped to Kris on On Services loads (25% of `funded` per load + 25% of released reserves for `customer = "On Services"`). Add more partners/customers by extending [src/views/Commissions.jsx](src/views/Commissions.jsx).
 
 The Reserves sub-tab default is `unreleased` because that's the live exposure — Released is a historical roll-up.
 
@@ -119,7 +119,7 @@ Loan principals stay hardcoded because QBO's "Shareholder Contributions - Chris"
 
 ---
 
-## Tab 3: Kris — On Services Commission
+## Tab 3: Commissions (Kris on On Services)
 
 Kris is a partner whose commission is tied to On Services loads only:
 - **Funded commission** = 25% × `funded` (the CSV column) — earned once the load is funded, regardless of release

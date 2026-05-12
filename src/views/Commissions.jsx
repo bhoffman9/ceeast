@@ -4,7 +4,7 @@ import { fd, fdate } from "../lib/format";
 
 const KRIS_RATE = 0.25;
 
-export default function Kris() {
+export default function Commissions() {
   const [loads, setLoads] = useState([]);
   const [payments, setPayments] = useState([]);
   const [err, setErr] = useState(null);
@@ -123,7 +123,7 @@ export default function Kris() {
 
   return (
     <div>
-      <div className="ptitle">Kris — On Services Commission</div>
+      <div className="ptitle">Commissions — On Services (Kris)</div>
       <div className="psub">
         25% of CSV <code>funded</code> per load + 25% of released reserves
       </div>
