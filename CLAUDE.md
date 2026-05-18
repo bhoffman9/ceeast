@@ -244,9 +244,20 @@ The Excel itself is gitignored (payroll, contact info, expenses). PDFs are also 
 - 431 released
   - **110** released by Flexent (`release_source=flexent`, PDF-backed)
   - **321** released by Triumph (`release_source=triumph`, Excel-only — pre-Flexent)
-- 199 unreleased
+- 199 unreleased — **$22,334 in reserves still held by Flexent** (future inflow to CE East at 5%)
+  - Concentrated in On Services ($6.2K, 35 loads), Gofo Inc ($5.4K, 18 loads), Rentex ($5.2K, 101 loads)
 - Reserve transfer queue: **All caught up ✓** ($8,011.78 transferred to date across 110 loads)
 - Kris commission status: $8,685.88 earned / $6,339.54 paid / **$2,346.36 outstanding**
+
+### Avg days from invoice → reserve release (Flexent era, n=40 of 110)
+- Rentex: **27 days** (fastest)
+- On Services: 33 days
+- Insync Productions: 39 days
+- Gofo Inc: **110 days** (outlier — investigate)
+- All customers: 38 days avg / 33 median
+- Excluding Gofo: 32.5 days avg / 29 median
+
+**Data quality caveat:** 70 of 110 Flexent-released loads have a blank `invoice_date` in the Excel (63 of those are Rentex). Days-to-pay numbers are only based on the 40 loads that have both dates. Back-fill invoice_date for the missing 70 to get a more reliable customer-aging picture.
 
 ## Deploy
 
@@ -276,11 +287,13 @@ The Excel itself is gitignored (payroll, contact info, expenses). PDFs are also 
 
 ## Open Items / TODO
 
+- **Back-fill `invoice_date` for the 70 Flexent-released loads missing it in the Excel** (63 Rentex + 4 On Services + 2 Gofo Express + 1 Insync) — currently breaks days-to-pay analysis
+- Investigate why Gofo Inc reserves take ~110 days to release (vs ~27 days for Rentex)
+- Collect remaining $123.72 from Kris payment for 2000561 next time he gets paid (partial after 5/12)
 - Per-customer aging on Unreleased (days since invoice_date → flag stale reserves)
 - CSV export button on the Unreleased tab
 - Optional: pull Chris's contribution principal from QBO journal entries (currently hardcoded — QBO equity shows current balance, not original deposit)
 - Optional: "Data refreshed: YYYY-MM-DD" timestamp on the Reserves tab so viewers know how stale the snapshot is
-- Verify composition of 2/25/26 $613.25 Kris payment (Ben confirmed 2026-05-11; seed comment in kris_payments.csv documents it)
 - Resolve whether 7-digit `2000xxx`/`2001xxx` invoices in the CE East Excel are actually CE East or were mis-keyed from CE Brokerage — currently they show up under the Commissions tab via `customer = "On Services"` matching
 
 ## Related Projects
