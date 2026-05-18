@@ -26,3 +26,16 @@ payment_date,invoice_number,leg,amount,notes
 2026-04-13,39399,funded,215.00,4/13/26
 2026-04-13,39398,funded,215.00,4/13/26
 2026-04-13,39417,funded,145.00,4/13/26
+2026-05-12,38246,funded,253.12,5/12 ACH (oldest-first allocation, no reserves per Ben)
+2026-05-12,39401,funded,227.50,5/12 ACH
+2026-05-12,39403,funded,177.50,5/12 ACH
+2026-05-12,39419,funded,152.50,5/12 ACH
+2026-05-12,2000501,funded,215.00,5/12 ACH
+2026-05-12,2000928,funded,54.38,5/12 ACH
+2026-05-12,2000719,funded,171.88,5/12 ACH
+2026-05-12,2000726,funded,240.62,5/12 ACH
+2026-05-12,2000734,funded,240.62,5/12 ACH
+2026-05-12,2000559,funded,115.62,5/12 ACH
+2026-05-12,2001018,funded,64.38,5/12 ACH
+2026-05-12,2001019,funded,76.88,5/12 ACH
+2026-05-12,2000561,funded,51.28,5/12 ACH (partial of $175.00 owed; balance $123.72 still due)

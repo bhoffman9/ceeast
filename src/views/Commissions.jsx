@@ -23,13 +23,18 @@ export default function Commissions() {
     [loads],
   );
 
-  // Build an index of paid (invoice, leg) -> { date, amount } so per-load checkmarks
-  // can resolve quickly. Each row in kris_payments.csv is one leg of one invoice.
+  // Build an index of paid (invoice, leg) -> { totalPaid, lastDate, rows }.
+  // Multiple rows can exist for the same leg when a payment is partial — the
+  // ones must sum to the expected commission before the leg is "fully paid."
   const paidIndex = useMemo(() => {
     const m = new Map();
     for (const p of payments) {
       const key = `${p.invoice_number}|${p.leg}`;
-      m.set(key, { date: p.payment_date, amount: Number(p.amount || 0), notes: p.notes });
+      const cur = m.get(key) || { totalPaid: 0, lastDate: "", rows: [] };
+      cur.totalPaid += Number(p.amount || 0);
+      cur.rows.push(p);
+      if (!cur.lastDate || String(p.payment_date) > cur.lastDate) cur.lastDate = p.payment_date;
+      m.set(key, cur);
     }
     return m;
   }, [payments]);
@@ -50,8 +55,17 @@ export default function Commissions() {
       const projectedReserve = Number(l.reserves || 0);
       const reserveComm = l.released ? actualReserve * KRIS_RATE : 0;
       const reserveCommPotential = projectedReserve * KRIS_RATE;
-      const fundedPaid = paidIndex.get(`${l.invoice_number}|funded`) || null;
-      const reservePaid = paidIndex.get(`${l.invoice_number}|reserve`) || null;
+      const fundedPayInfo = paidIndex.get(`${l.invoice_number}|funded`) || null;
+      const reservePayInfo = paidIndex.get(`${l.invoice_number}|reserve`) || null;
+      const fundedPaid = fundedPayInfo ? fundedPayInfo.totalPaid : 0;
+      const reservePaid = reservePayInfo ? reservePayInfo.totalPaid : 0;
+      // "Fully paid" tolerates 1¢ rounding diffs between expected and paid.
+      const fundedFullyPaid = fundedPayInfo && Math.abs(fundedPaid - fundedComm) < 0.01;
+      const fundedPartial = fundedPayInfo && !fundedFullyPaid;
+      const fundedRemaining = fundedComm - fundedPaid;
+      const reserveFullyPaid = reservePayInfo && Math.abs(reservePaid - reserveComm) < 0.01;
+      const reservePartial = reservePayInfo && !reserveFullyPaid;
+      const reserveRemaining = reserveComm - reservePaid;
       return {
         ...l,
         actualReserve,
@@ -60,8 +74,16 @@ export default function Commissions() {
         reserveComm,
         reserveCommPotential,
         totalDue: fundedComm + reserveComm,
+        fundedPayInfo,
+        reservePayInfo,
         fundedPaid,
         reservePaid,
+        fundedFullyPaid,
+        fundedPartial,
+        fundedRemaining,
+        reserveFullyPaid,
+        reservePartial,
+        reserveRemaining,
       };
     }).sort((a, b) => String(b.invoice_date || "").localeCompare(String(a.invoice_date || "")));
   }, [onServices, paidIndex]);
@@ -77,12 +99,12 @@ export default function Commissions() {
     const totalPaid = payments.reduce((s, p) => s + Number(p.amount || 0), 0);
     const outstanding = totalEarned - totalPaid;
 
-    const outstandingFunded = lines
-      .filter((l) => !l.fundedPaid)
-      .reduce((s, l) => s + l.fundedComm, 0);
+    // Outstanding = expected − paid per leg. Handles partial payments correctly:
+    // a load with $175 expected and $51.28 paid contributes $123.72 to outstanding.
+    const outstandingFunded = lines.reduce((s, l) => s + (l.fundedFullyPaid ? 0 : l.fundedRemaining), 0);
     const outstandingReserve = lines
-      .filter((l) => l.released && !l.reservePaid)
-      .reduce((s, l) => s + l.reserveComm, 0);
+      .filter((l) => l.released)
+      .reduce((s, l) => s + (l.reserveFullyPaid ? 0 : l.reserveRemaining), 0);
 
     return {
       loads: lines.length,
@@ -95,8 +117,8 @@ export default function Commissions() {
       outstanding,
       outstandingFunded,
       outstandingReserve,
-      fundedLegsPaid: lines.filter((l) => l.fundedPaid).length,
-      reserveLegsPaid: lines.filter((l) => l.reservePaid).length,
+      fundedLegsPaid: lines.filter((l) => l.fundedFullyPaid).length,
+      reserveLegsPaid: lines.filter((l) => l.reserveFullyPaid).length,
     };
   }, [lines, payments]);
 
@@ -215,9 +237,13 @@ export default function Commissions() {
                     <td>{fd(l.invoice_amount, 0)}</td>
                     <td style={{ color: l.funded < 0 ? "#ff5252" : undefined }}>{fd(l.funded, 2)}</td>
                     <td style={{ color: negFunded ? "#ff5252" : "#3ddc84" }}>{fd(l.fundedComm, 2)}</td>
-                    <td title={l.fundedPaid ? `Paid ${l.fundedPaid.date} — ${fd(l.fundedPaid.amount, 2)}` : "Unpaid"}
-                        style={{ textAlign: "center", color: l.fundedPaid ? "#3ddc84" : "var(--mu)", fontSize: 14 }}>
-                      {l.fundedPaid ? "✓" : "—"}
+                    <td title={
+                      l.fundedFullyPaid ? `Paid ${l.fundedPayInfo.lastDate} — ${fd(l.fundedPaid, 2)}` :
+                      l.fundedPartial ? `Partial: paid ${fd(l.fundedPaid, 2)} of ${fd(l.fundedComm, 2)} (${fd(l.fundedRemaining, 2)} remaining)` :
+                      "Unpaid"
+                    }
+                        style={{ textAlign: "center", color: l.fundedFullyPaid ? "#3ddc84" : l.fundedPartial ? "#f5c542" : "var(--mu)", fontSize: 14 }}>
+                      {l.fundedFullyPaid ? "✓" : l.fundedPartial ? "½" : "—"}
                     </td>
                     <td style={{ fontSize: 11, color: l.released ? "#3ddc84" : "var(--mu)" }}>
                       {l.released ? (l.release_date ? fdate(l.release_date) : "yes") : "no"}
@@ -226,9 +252,13 @@ export default function Commissions() {
                     <td style={{ color: l.released ? "#3ddc84" : "#f5c542" }}>
                       {fd(l.released ? l.reserveComm : l.reserveCommPotential, 2)}
                     </td>
-                    <td title={l.reservePaid ? `Paid ${l.reservePaid.date} — ${fd(l.reservePaid.amount, 2)}` : (l.released ? "Released, unpaid" : "Pending release")}
-                        style={{ textAlign: "center", color: l.reservePaid ? "#3ddc84" : "var(--mu)", fontSize: 14 }}>
-                      {l.reservePaid ? "✓" : "—"}
+                    <td title={
+                      l.reserveFullyPaid ? `Paid ${l.reservePayInfo.lastDate} — ${fd(l.reservePaid, 2)}` :
+                      l.reservePartial ? `Partial: paid ${fd(l.reservePaid, 2)} of ${fd(l.reserveComm, 2)} (${fd(l.reserveRemaining, 2)} remaining)` :
+                      l.released ? "Released, unpaid" : "Pending release"
+                    }
+                        style={{ textAlign: "center", color: l.reserveFullyPaid ? "#3ddc84" : l.reservePartial ? "#f5c542" : "var(--mu)", fontSize: 14 }}>
+                      {l.reserveFullyPaid ? "✓" : l.reservePartial ? "½" : "—"}
                     </td>
                     <td style={{ fontWeight: 600 }}>{fd(l.totalDue + (l.released ? 0 : l.reserveCommPotential), 2)}</td>
                   </tr>
