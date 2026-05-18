@@ -298,7 +298,22 @@ def main() -> int:
         label = "pdf-new" if archive_after else "pdf-arc"
         print(f"  {label}: {pdf.name} -> {len(rows)} Pmt rows ({new_count} unique)")
         if archive_after:
-            shutil.move(str(pdf), ARCHIVE / pdf.name)
+            # Avoid overwriting an existing archived PDF with the same name —
+            # Flexent often re-uses generic filenames like "CliRsvRept (1).pdf"
+            # week to week. Stamp the run date onto the destination if it collides.
+            dest = ARCHIVE / pdf.name
+            if dest.exists():
+                stem = pdf.stem
+                suffix = pdf.suffix
+                stamp = datetime.now().strftime("%Y%m%d")
+                dest = ARCHIVE / f"{stem}_{stamp}{suffix}"
+                # If even the stamped name exists (re-run same day), add a counter
+                i = 1
+                while dest.exists():
+                    dest = ARCHIVE / f"{stem}_{stamp}_{i}{suffix}"
+                    i += 1
+                print(f"         (renaming to {dest.name} to avoid overwriting existing archive)")
+            shutil.move(str(pdf), dest)
 
     for pdf in archived_pdfs:
         _ingest(pdf, archive_after=False)

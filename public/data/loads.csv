@@ -497,21 +497,21 @@ invoice_number,status,invoice_date,submission_date,po_load,customer,customer_raw
 502401,,2026-04-13,,141401.0,Rentex,Rentex AV,,500.0,200.0,25.0,25.0,25.0,,"KJ Transport & Hauling, LLC",,275.0,APR 2026 INV,true,,25.0,triumph
 476717,,2026-04-10,,141447.0,Rentex,Rentex - MA,,750.0,212.5,37.5,37.5,,,"OnPoint Delivery Services, LLC",,500.0,APR 2026 INV,false,,,
 506252,,2026-04-13,,141716.0,Rentex,Rentex AV,,950.0,-97.5,47.5,47.5,,,"S3 Expediting, LLC",,1000.0,APR 2026 INV,false,,,
-2000751,,2026-04-14,,141705.0,Rentex,Rentex - MA,,1402.0,280.9,70.1,70.1,,,"Triumph Trucking, LLC",,1051.0,APR 2026 INV,false,,,
-2000686,,2026-04-14,,141447.0,Rentex,Rentex - MA,,750.0,212.5,37.5,37.5,,,Triple M Cleaning and Trucking,,500.0,APR 2026 INV,false,,,
-2000678,,2026-04-14,,141447.0,Rentex,Rentex - MA,,750.0,162.5,37.5,37.5,37.5,,"Salcido Trucking, LLC",,550.0,APR 2026 INV,true,,37.5,triumph
-2000682,,2026-04-14,,141447.0,Rentex,Rentex - MA,,750.0,212.5,37.5,37.5,37.5,,"Fresh Wind Express Delivery Services, LLC",,500.0,APR 2026 INV,true,,37.5,triumph
-2000174,,2026-04-14,,138664.0,Rentex,Rentex - MA,,950.0,202.5,47.5,47.5,47.5,,"Shang Brother, Inc",,700.0,APR 2026 INV,true,,47.5,triumph
-2000175,,2026-04-14,,139647.0,Rentex,Rentex - MA,,800.0,160.0,40.0,40.0,40.0,,"Dorsey Trucking & Transportation, LLC",,600.0,APR 2026 INV,true,,40.0,triumph
+2000751,,2026-04-14,,141705.0,Rentex,Rentex - MA,,1402.0,280.9,70.1,70.1,,,"Triumph Trucking, LLC",,1051.0,APR 2026 INV,true,2026-05-12,70.1,flexent
+2000686,,2026-04-14,,141447.0,Rentex,Rentex - MA,,750.0,212.5,37.5,37.5,,,Triple M Cleaning and Trucking,,500.0,APR 2026 INV,true,2026-05-12,37.5,flexent
+2000678,,2026-04-14,,141447.0,Rentex,Rentex - MA,,750.0,162.5,37.5,37.5,37.5,,"Salcido Trucking, LLC",,550.0,APR 2026 INV,true,2026-05-12,37.5,flexent
+2000682,,2026-04-14,,141447.0,Rentex,Rentex - MA,,750.0,212.5,37.5,37.5,37.5,,"Fresh Wind Express Delivery Services, LLC",,500.0,APR 2026 INV,true,2026-05-12,37.5,flexent
+2000174,,2026-04-14,,138664.0,Rentex,Rentex - MA,,950.0,202.5,47.5,47.5,47.5,,"Shang Brother, Inc",,700.0,APR 2026 INV,true,2026-05-12,47.5,flexent
+2000175,,2026-04-14,,139647.0,Rentex,Rentex - MA,,800.0,160.0,40.0,40.0,40.0,,"Dorsey Trucking & Transportation, LLC",,600.0,APR 2026 INV,true,2026-05-12,40.0,flexent
 2000501,,2026-04-14,,109966.0,On Services,On-Services,,3800.0,860.0,190.0,190.0,,,"Landstar Ranger, Inc",,2750.0,APR 2026 INV,false,,,
-2000181,,2026-04-16,,138664.0,Rentex,Rentex MA,,750.0,112.5,37.5,37.5,,,Total Outsourcing Logistics,,600.0,APR 2026 INV,false,,,
-2000640,,2026-04-16,,141285.0,Rentex,Rentex MA,,600.0,170.0,30.0,30.0,,,Pinnacle Freight and Logistics,,400.0,APR 2026 INV,false,,,
-2000677,,2026-04-16,,141447.0,Rentex,Rentex AV,,950.0,315.0,47.5,47.5,,,AL & C Transport,,587.5,APR 2026 INV,false,,,
-2000679,,2026-04-16,,141447.0,Rentex,Rentex AV,,750.0,212.5,37.5,37.5,,,ValPac Trucking,,500.0,APR 2026 INV,false,,,
-2000680,,2026-04-16,,141447.0,Rentex,Rentex AV,,750.0,162.5,37.5,37.5,,,Tucker Family Freight,,550.0,APR 2026 INV,false,,,
-2000681,,2026-04-16,,141447.0,Rentex,Rentex AV,,750.0,127.5,37.5,37.5,,,Pushing P Transportation,,585.0,APR 2026 INV,false,,,
-2000803,,2026-04-16,,141285.0,Rentex,Rentex AV,,675.0,241.25,33.75,33.75,,,Lauren Florida Trucks,,400.0,APR 2026 INV,false,,,
-2000898,,2026-04-16,,142176.0,Rentex,Rentex MA,,950.0,352.5,47.5,47.5,,,Essentialy Soft,,550.0,APR 2026 INV,false,,,
+2000181,,2026-04-16,,138664.0,Rentex,Rentex MA,,750.0,112.5,37.5,37.5,,,Total Outsourcing Logistics,,600.0,APR 2026 INV,true,2026-05-12,37.5,flexent
+2000640,,2026-04-16,,141285.0,Rentex,Rentex MA,,600.0,170.0,30.0,30.0,,,Pinnacle Freight and Logistics,,400.0,APR 2026 INV,true,2026-05-12,30.0,flexent
+2000677,,2026-04-16,,141447.0,Rentex,Rentex AV,,950.0,315.0,47.5,47.5,,,AL & C Transport,,587.5,APR 2026 INV,true,2026-05-12,47.5,flexent
+2000679,,2026-04-16,,141447.0,Rentex,Rentex AV,,750.0,212.5,37.5,37.5,,,ValPac Trucking,,500.0,APR 2026 INV,true,2026-05-12,37.5,flexent
+2000680,,2026-04-16,,141447.0,Rentex,Rentex AV,,750.0,162.5,37.5,37.5,,,Tucker Family Freight,,550.0,APR 2026 INV,true,2026-05-12,37.5,flexent
+2000681,,2026-04-16,,141447.0,Rentex,Rentex AV,,750.0,127.5,37.5,37.5,,,Pushing P Transportation,,585.0,APR 2026 INV,true,2026-05-12,37.5,flexent
+2000803,,2026-04-16,,141285.0,Rentex,Rentex AV,,675.0,241.25,33.75,33.75,,,Lauren Florida Trucks,,400.0,APR 2026 INV,true,2026-05-12,33.75,flexent
+2000898,,2026-04-16,,142176.0,Rentex,Rentex MA,,950.0,352.5,47.5,47.5,,,Essentialy Soft,,550.0,APR 2026 INV,true,2026-05-12,47.5,flexent
 2000592,,2026-04-20,,141151.0,Rentex,Rentex MA,,1050.0,147.5,52.5,52.5,,,Glory Trans,,850.0,APR 2026 INV,false,,,
 2000601,,2026-04-20,,141217.0,Rentex,Rentex MA,,750.0,112.5,37.5,37.5,,,Tim P Le,,600.0,APR 2026 INV,false,,,
 2000613,,2026-04-20,,141236.0,Rentex,Rentex MA,,950.0,152.5,47.5,47.5,,,Joanne Enterprise,,750.0,APR 2026 INV,false,,,
@@ -592,7 +592,7 @@ invoice_number,status,invoice_date,submission_date,po_load,customer,customer_raw
 2001064,,2026-05-01,,PO#INV142971,Rentex,Rentex,,850.0,107.5,42.5,42.5,,,JGA Trucking,,700.0,MAY 2026 INV,false,,,
 2001157,,2026-05-01,,110999.0,On Services,On Services,,1200.0,290.0,60.0,60.0,,,Sullens Transportation,,850.0,MAY 2026 INV,false,,,
 2001264,,2026-05-01,,PO#INV143987,Rentex,Rentex,,900.0,180.0,45.0,45.0,,,Acies Transport,,675.0,MAY 2026 INV,false,,,
-2001333,,2026-05-01,,111194.0,On Services,On Services,,1500.0,525.0,75.0,75.0,,,Show Freight,,900.0,MAY 2026 INV,false,,,
+2001333,,2026-05-15,,111194,On Services,On Services,,1500.0,525.0,75.0,75.0,,,SF,,900.0,MAY 2026 INV,false,,,
 2001388,,2026-05-01,,PO#INV144318,Rentex,Rentex,,950.0,202.5,47.5,47.5,,,Virk Trans,,700.0,MAY 2026 INV,false,,,
 2001208,,2026-05-08,,143778.0,Rentex,Rentex,,650.0,167.5,32.5,32.5,,,Axper LLC,,450.0,MAY 2026 INV,false,,,
 2001004,,2026-05-08,,142705.0,Rentex,Rentex,,700.0,165.0,35.0,35.0,,,Acies Transport,,500.0,MAY 2026 INV,false,,,
@@ -609,7 +609,23 @@ invoice_number,status,invoice_date,submission_date,po_load,customer,customer_raw
 2001102,,2026-05-11,,143074.0,Rentex,Rentex,,875.0,-668.75,43.75,43.75,,,Safeway Truck Lines,,1500.0,MAY 2026 INV,false,,,
 2001265,,2026-05-11,,143987.0,Rentex,Rentex,,900.0,180.0,45.0,45.0,,,Acies Transport,,675.0,MAY 2026 INV,false,,,
 2001303,,2026-05-11,,144083.0,Rentex,Rentex,,1200.0,140.0,60.0,60.0,,,MMG Trucking,,1000.0,MAY 2026 INV,false,,,
-2001336,,2026-05-11,,111194.0,On Services,On Services,,1500.0,425.0,75.0,75.0,,,Show Freight,,1000.0,MAY 2026 INV,false,,,
+2001336,,2026-05-15,,111194,On Services,On Services,,1500.0,425.0,75.0,75.0,,,SF,,1000.0,MAY 2026 INV,false,,,
 2001504,,2026-05-11,,144655.0,Rentex,Rentex,,575.0,196.25,28.75,28.75,,,Acies Transport,,350.0,MAY 2026 INV,false,,,
 2001595,,2026-05-11,,145021.0,Rentex,Rentex,,800.0,260.0,40.0,40.0,,,Mkes Delivery,,500.0,MAY 2026 INV,false,,,
 2001593,,2026-05-11,,72227.0,Freeman,Freeman,,3750.0,762.5,187.5,187.5,,,MTC Freight,,2800.0,MAY 2026 INV,false,,,
+2001638,,2026-05-12,,145100.0,Rentex,Rentex,,925.0,203.75,46.25,46.25,,,Letcia Trans,,675.0,MAY 2026 INV,false,,,
+2000724,,2026-05-12,,141533.0,Rentex,Rentex,,1500.0,-75.0,75.0,75.0,,,Yohan Transport,,1500.0,MAY 2026 INV,false,,,
+2001361,,2026-05-12,,144272.0,Rentex,Rentex,,1125.0,168.75,56.25,56.25,,,Otana Transport,,900.0,MAY 2026 INV,false,,,
+2001256,,2026-05-12,,111137.0,On Services,On Services,,3800.0,610.0,190.0,190.0,,,Landstar Rangers,,3000.0,MAY 2026 INV,false,,,
+2000711,,2026-05-14,,141521.0,Rentex,Rentex,,1050.0,397.5,52.5,52.5,,,V12 Trucking,,600.0,MAY 2026 INV,false,,,
+2001371,,2026-05-14,,144281.0,Rentex,Rentex,,850.0,257.5,42.5,42.5,,,United Fleet,,550.0,MAY 2026 INV,false,,,
+2001694,,2026-05-14,,145301.0,Rentex,Rentex,,2650.0,17.5,132.5,132.5,,,Gindia Logistics,,2500.0,MAY 2026 INV,false,,,
+2001669,,2026-05-14,,145219.0,Rentex,Rentex,,500.0,125.0,25.0,25.0,,,Aifos Logisticss,,350.0,MAY 2026 INV,false,,,
+2001362,,2026-05-14,,144272.0,Rentex,Rentex,,925.0,178.75,46.25,46.25,,,VZ United,,700.0,MAY 2026 INV,false,,,
+2001756,,2026-05-15,,,Freeman,Freeman,,5400.0,530.0,270.0,270.0,,,Awet Transport,,4600.0,MAY 2026 INV,false,,,
+2001639,,2026-05-15,,PO#INV145100,Rentex,Rentex,,925.0,178.75,46.25,46.25,,,Terra Motin,,700.0,MAY 2026 INV,false,,,
+2001818,,2026-05-15,,PO#INV145858,Rentex,Rentex,,1050.0,297.5,52.5,52.5,,,Apex,,700.0,MAY 2026 INV,false,,,
+2001596,,2026-05-15,,145021.0,Rentex,Rentex,,700.0,265.0,35.0,35.0,,,Mkes Delivery,,400.0,MAY 2026 INV,false,,,
+2000387,,2026-05-15,,140657.0,Rentex,Rentex,,925.0,-1221.25,46.25,46.25,,,Safeway Truck Lines,,2100.0,MAY 2026 INV,false,,,
+2000725,,2026-05-15,,141533.0,Rentex,Rentex,,1125.0,168.75,56.25,56.25,,,HAC Transportation,,900.0,MAY 2026 INV,false,,,
+2001257,,2026-05-15,,,On Services,On Services,,3800.0,610.0,190.0,190.0,,,SF,,3000.0,MAY 2026 INV,false,,,
