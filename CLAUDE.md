@@ -152,14 +152,25 @@ Data: filtered from `public/data/loads.csv` (`customer === "On Services"`) + `pu
 
 ### kris_payments.csv schema
 ```
-payment_date, payment_amount, notes
+payment_date, invoice_number, leg, amount, notes
 ```
-Append a new row whenever Kris is paid. The dashboard sums all payments and subtracts from total earned to compute Outstanding. No per-invoice allocation needed — lump-sum tracking is the model.
+One row per (invoice, leg) paid. `leg` is `funded` or `reserve`. **Multiple rows per (invoice, leg) are allowed** — the dashboard sums them. Within 1¢ of the expected commission → green ✓ "fully paid". Less than expected → yellow ½ "partial" with `expected − paid` carried as outstanding (tooltip shows the breakdown).
 
-### Initial seed (2026-05-11)
-- 2026-01-29 $620.00 — funded commission for invoices 37077/37078/37079/37080 (4 × $155)
-- 2026-02-25 $613.25 — mixed batch, composition unverified (Ben to confirm)
-- 2026-03-20 $1,147.50 — funded commission for Section 2 batch: 38247/38248/38249/38496/38498
+### Allocation when Ben pays a lump sum
+Ben's preferred mode is "apply it however you need to, even if an invoice is partial" (confirmed 2026-05-18). When a payment arrives without a leg list:
+1. Snapshot unpaid funded legs as of the payment date (not today)
+2. Sort oldest invoice_date first
+3. Allocate the lump sum across them in order
+4. Split the final load to hit the exact total (partial row)
+
+Don't include reserve legs unless Ben explicitly says so.
+
+### Payment history (verified)
+- 2026-01-29 $620.00 — funded for 37077/37078/37079/37080 (4 × $155)
+- 2026-02-25 $613.25 — funded for 38009/38250/38013/38011/38012/38251 ($496.25, incl. −$141.25 on 38013 loss) + reserves for 37077-37080 ($117)
+- 2026-03-20 $1,147.50 — funded for 38247/38248/38249/38496/38498
+- 2026-04-13 $1,917.50 — funded for 38497/38499/38846/38847/39400/39399/39398/39417
+- 2026-05-12 $2,041.31 — funded for 38246 + 11 April invoices (oldest-first) + $51.28 partial on 2000561 ($123.72 still owed)
 
 ---
 
@@ -223,18 +234,19 @@ Flexent holds **5% of every funded invoice** as reserve. When the customer pays,
    - Parses every `Pmt` row out of **every PDF in `incoming/` AND every PDF in `docs/`** — Flexent reports are cumulative for the current period only, so the archive must be re-read every run or PDF-only release flags would silently drop off when a newer report supersedes an older one
    - Cross-merges Excel ⨝ PDF on `invoice_number` — PDF wins for the Flexent era; Excel flag is the fallback for Triumph-era loads
    - Writes `loads.csv` + `reserve_status.csv`
-   - Moves `incoming/` PDFs to `docs/` (archived PDFs stay put). Excel stays in `incoming/` (Ben keeps editing it)
+   - Moves `incoming/` PDFs to `docs/`. **If a same-named PDF already exists in `docs/`, adds a date-stamp suffix** (e.g. `CliRsvRept (1)_20260518.pdf`) instead of overwriting — Flexent re-uses filenames like `CliRsvRept (1).pdf` week to week and overwrites would silently destroy historical PDF coverage. Excel stays in `incoming/` (Ben keeps editing it)
 3. Commit + push `loads.csv` + `reserve_status.csv` — Vercel redeploys
 
 The Excel itself is gitignored (payroll, contact info, expenses). PDFs are also gitignored. Only the derived CSV gets committed.
 
-### Run state (2026-05-11)
-- 614 loads parsed and deduped
-- 421 released ($895K gross / $44.8K reserve released @ 5%)
-  - **96** released by Flexent (`release_source=flexent`, PDF-backed)
-  - **325** released by Triumph (`release_source=triumph`, Excel-only — pre-Flexent)
-- 193 unreleased ($403K gross / $20.2K reserve held @ 5%)
-- PDF coverage: Mar 13 → May 4, 2026 (3 archived reports in `docs/`)
+### Run state (2026-05-18)
+- 630 loads parsed and deduped
+- 431 released
+  - **110** released by Flexent (`release_source=flexent`, PDF-backed)
+  - **321** released by Triumph (`release_source=triumph`, Excel-only — pre-Flexent)
+- 199 unreleased
+- Reserve transfer queue: **All caught up ✓** ($8,011.78 transferred to date across 110 loads)
+- Kris commission status: $8,685.88 earned / $6,339.54 paid / **$2,346.36 outstanding**
 
 ## Deploy
 
