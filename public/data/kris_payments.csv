@@ -39,3 +39,16 @@ payment_date,invoice_number,leg,amount,notes
 2026-05-12,2001018,funded,64.38,5/12 ACH
 2026-05-12,2001019,funded,76.88,5/12 ACH
 2026-05-12,2000561,funded,51.28,5/12 ACH (partial of $175.00 owed; balance $123.72 still due)
+2026-05-29,2000561,funded,123.72,5/29 ACH (clears 5/12 partial — leg now fully paid)
+2026-05-29,2000722,funded,171.88,5/29 ACH (oldest-first allocation)
+2026-05-29,2000731,funded,540.63,5/29 ACH (oldest-first allocation)
+2026-05-29,2000735,funded,240.63,5/29 ACH (oldest-first allocation)
+2026-05-29,2001156,funded,160.00,5/29 ACH (oldest-first allocation)
+2026-05-29,2001261,funded,61.25,5/29 ACH (oldest-first allocation)
+2026-05-29,2001309,funded,52.50,5/29 ACH (oldest-first allocation)
+2026-05-29,2001157,funded,72.50,5/29 ACH (oldest-first allocation)
+2026-05-29,2001256,funded,152.50,5/29 ACH (oldest-first allocation)
+2026-05-29,2001333,funded,131.25,5/29 ACH (oldest-first allocation)
+2026-05-29,2001336,funded,106.25,5/29 ACH (oldest-first allocation)
+2026-05-29,2001257,funded,152.50,5/29 ACH (oldest-first allocation)
+2026-05-29,2001772,funded,75.70,5/29 ACH PARTIAL — remainder of $2041.31; funded amt not yet in loads.csv (re-run Excel to confirm/finish this leg)
