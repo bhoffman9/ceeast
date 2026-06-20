@@ -2,11 +2,9 @@ import { useState } from "react";
 import { CSS } from "./styles";
 import PasswordGate from "./PasswordGate";
 import OwnerPayback from "./views/OwnerPayback";
-import Reserves from "./views/Reserves";
 
 const TABS = [
   { id: "owner", label: "Income", el: OwnerPayback },
-  { id: "reserves", label: "Reserves", el: Reserves },
 ];
 
 export default function App() {
