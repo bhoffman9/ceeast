@@ -1,9 +1,15 @@
 # CE East Dashboard — CLAUDE.md
 
-Capacity Express East LLC — owner-facing dashboard. Three tabs:
+Capacity Express East LLC — owner-facing dashboard.
+
+> **As of 2026-06-20 the dashboard is Income-only.** The **Reserves** and **Commissions** tabs were removed from `src/App.jsx`. Their view components (`Reserves/`, `Commissions.jsx`), the reserve CSV/PDF pipeline (`process.py`, `public/data/*.csv`), and `kris_payments.csv` all remain in the repo and are recoverable from git — they're just no longer surfaced in the UI. The sections documenting them below are retained for that reason and are flagged **[UNWIRED]**.
+
+**Live tab:**
 - **Income** (default) — live QBO P&L + Balance Sheet, distribution estimator, shareholder payback tracker
+
+**Removed 2026-06-20 (data/pipeline still maintained, UI unwired):**
 - **Reserves** — load-by-load reserve tracking against the live load book + Flexent PDFs, with per-invoice transfer queue
-- **Commissions** — partner commission tracker (currently Kris on On Services loads)
+- **Commissions** — partner commission tracker (Kris on On Services loads). Dropped because funded commission needs the hauler carrier cost, which lives only in Ben's Excel — Alvys exposes `TripValue` (the full billed rate = invoice amount), not the outside-hauler cost, so it can't supply funded.
 
 ## Live URL
 
@@ -82,12 +88,16 @@ The component file is still named `OwnerPayback.jsx` for git history; the displa
 
 ## Tab Structure
 
-Top-level tabs in [src/App.jsx](src/App.jsx):
+Top-level tabs in [src/App.jsx](src/App.jsx) — **only Income is wired as of 2026-06-20**:
 1. **Income** (default) — live QBO P&L + BS, distribution estimator, shareholder payback tracker
+
+**[UNWIRED]** (removed from `TABS` array 2026-06-20; components still in repo — re-add the import + `TABS` entry to restore):
 2. **Reserves** — sub-tabs: **Unreleased** (default — live exposure) and **Released** (Reserves-to-Transfer queue + all-time customer rollup)
-3. **Commissions** — Partner commission tracker. Currently scoped to Kris on On Services loads (25% of `funded` per load + 25% of released reserves for `customer = "On Services"`). Add more partners/customers by extending [src/views/Commissions.jsx](src/views/Commissions.jsx).
+3. **Commissions** — Partner commission tracker scoped to Kris on On Services loads (25% of `funded` per load + 25% of released reserves for `customer = "On Services"`). See [src/views/Commissions.jsx](src/views/Commissions.jsx).
 
 ## Weekly Monday workflow
+
+> Steps 3, 4, 6 below are **Commissions-related and now obsolete** (tab removed 2026-06-20) unless the Commissions tab is revived. The reserve steps (1, 2, 5) still apply if/when the Reserves tab is re-wired.
 
 Ben drops `CliRsvRept*.pdf` (the latest Flexent reserve report) and the updated Excel into [incoming/](incoming/). Assistant runs the full drill end-to-end:
 
@@ -140,7 +150,7 @@ Loan principals stay hardcoded because QBO's "Shareholder Contributions - Chris"
 
 ---
 
-## Tab 3: Commissions (Kris on On Services)
+## Tab 3: Commissions (Kris on On Services) — [UNWIRED 2026-06-20]
 
 Kris is a partner whose commission is tied to On Services loads only:
 - **Funded commission** = 25% × `funded` (the CSV column) — earned once the load is funded, regardless of release
@@ -174,7 +184,7 @@ Don't include reserve legs unless Ben explicitly says so.
 
 ---
 
-## Tab 2: Reserves (CSV pipeline)
+## Tab 2: Reserves (CSV pipeline) — [UNWIRED 2026-06-20; pipeline still maintained]
 
 ```
 incoming/CE East Coast Expenses.xlsx ──┐
